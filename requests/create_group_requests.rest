@@ -1,0 +1,14 @@
+### Get created group lists (//This Part Should Be Moved To Group List Page Related Code)
+GET http://localhost:5000/create-group/
+Content-Type: application/json
+
+
+
+### Create a Group (// This is the Related Code Part)
+POST http://localhost:5000/create-group/
+Content-Type: application/json
+
+{
+    "group_name":"new Group",
+    "owner_id":"1"
+}
