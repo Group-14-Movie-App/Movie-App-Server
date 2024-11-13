@@ -9,8 +9,8 @@ app.use(express.json());
 
 
 //Routes Definition do here
-const createGroupRouter = require('./routes/createGroupRoute.js');
-app.use('/create-group', createGroupRouter)
+const registerRouter = require('./routes/registerRoute.js');
+app.use('/register', registerRouter);
 
 
 
