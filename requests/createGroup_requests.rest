@@ -1,0 +1,9 @@
+## Create a New Group
+POST http://localhost:5000/CreateGroup
+Content-Type: application/json
+
+{
+    "groupName": "Movie Buffs",
+    "description": "A group for movie enthusiasts to discuss and plan movie nights.",
+    "ownerID": 1
+}

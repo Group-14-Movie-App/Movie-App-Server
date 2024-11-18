@@ -12,6 +12,9 @@ app.use(express.json());
 const registerRouter = require('./routes/registerRoute.js');
 app.use('/register', registerRouter);
 
+const CreateGroupRouter = require('./routes/CreateGroupRoute.js');
+app.use('/CreateGroup', CreateGroupRouter);
+
 
 
 const port = 5000
