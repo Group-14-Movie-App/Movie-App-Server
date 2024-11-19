@@ -9,6 +9,8 @@ CREATE TABLE Users (
     isAdmin BOOLEAN DEFAULT FALSE
 );
 
+SELECT * FROM Users;
+
 INSERT INTO Users (email, password, firstName, lastName, city) 
 VALUES ('testuser@example.com', 'Password123', 'John', 'Doe', 'Helsinki');
 
