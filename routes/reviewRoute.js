@@ -45,25 +45,42 @@ reviewRouter.post('/', async (req, res) => {
     }
   });
 
-// Route to get all reviews
+// Route to get all reviews (with optional filtering by movie title)
 reviewRouter.get('/', async (req, res) => {
-    const { title } = req.query; // Get movie title from query
-    try {
-      let query = 'SELECT * FROM Reviews';
+  const { title } = req.query; // Get movie title from query parameter
+
+  try {
+      // Query to fetch reviews and join with user details
+      let query = `
+          SELECT 
+              r.reviewID, 
+              r.userID, 
+              r.movieTitle, 
+              r.releaseDate, 
+              r.description, 
+              r.rating, 
+              r.timestamp,
+              u.firstName, 
+              u.lastName 
+          FROM Reviews r
+          JOIN Users u ON r.userID = u.userID
+      `;
+
       const values = [];
-  
       if (title) {
-        query += ' WHERE movietitle = $1';
-        values.push(title);
+          query += ' WHERE r.movieTitle = $1';
+          values.push(title);
       }
-  
+
+      query += ' ORDER BY r.timestamp DESC'; // Order reviews by most recent
+
       const result = await pool.query(query, values);
       res.status(200).json(result.rows);
-    } catch (error) {
+  } catch (error) {
       console.error('Error fetching reviews:', error.message);
       res.status(500).json({ message: 'Internal server error' });
-    }
-  });
+  }
+});
   
 
 module.exports = reviewRouter;
