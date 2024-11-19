@@ -1,0 +1,3 @@
+### Get All Reviews
+GET http://localhost:5000/reviews
+Content-Type: application/json

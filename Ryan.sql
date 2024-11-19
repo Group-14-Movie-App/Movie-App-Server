@@ -9,6 +9,14 @@ CREATE TABLE Users (
     isAdmin BOOLEAN DEFAULT FALSE
 );
 
+SELECT * FROM Users;
+
+INSERT INTO Users (email, password, firstName, lastName, city) 
+VALUES ('testuser@example.com', 'Password123', 'John', 'Doe', 'Helsinki');
+
+INSERT INTO Users (email, password, firstName, lastName)
+VALUES ('anotheruser@example.com', '$2b$10$HASHED_PASSWORD_HERE', 'Another', 'User');
+
 
 -- Reviews Table (Updated Version)
 CREATE TABLE Reviews (
