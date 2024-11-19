@@ -15,6 +15,9 @@ app.use('/register', registerRouter);
 const CreateGroupRouter = require('./routes/CreateGroupRoute.js');
 app.use('/CreateGroup', CreateGroupRouter);
 
+const reviewRouter = require('./routes/reviewRoute.js')
+app.use('/reviews', reviewRouter)
+
 
 
 const port = 5000

@@ -9,11 +9,18 @@ CREATE TABLE Users (
     isAdmin BOOLEAN DEFAULT FALSE
 );
 
--- Reviews Table
+INSERT INTO Users (email, password, firstName, lastName, city) 
+VALUES ('testuser@example.com', 'Password123', 'John', 'Doe', 'Helsinki');
+
+
+
+
+-- Reviews Table (Updated Version)
 CREATE TABLE Reviews (
     reviewID SERIAL PRIMARY KEY,
     userID INT REFERENCES Users(userID) ON DELETE CASCADE,
-    movieID INT NOT NULL, -- ID of the movie (from API, not in database)
+    movieTitle VARCHAR(255) NOT NULL, -- Movie title to uniquely identify
+    releaseDate DATE NOT NULL, -- Release date to distinguish movies with the same title
     description TEXT,
     rating INT CHECK (rating BETWEEN 1 AND 5),
     timestamp TIMESTAMP DEFAULT CURRENT_TIMESTAMP
