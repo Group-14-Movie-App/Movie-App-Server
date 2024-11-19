@@ -1,0 +1,57 @@
+### Get the data of users
+
+GET http://localhost:5000/groupDetails/
+Content-Type: 'application/json' 
+
+app.get("/api/groups/:id", async (req, res) => {
+  try {
+    const groupId = req.params.id;
+
+    const group = await Group.findByPk(groupId); // Fetch group info
+    const pendingRequests = await GroupMember.findAll({
+      where: { groupId, status: "pending" },
+    });
+    const members = await GroupMember.findAll({
+      where: { groupId, status: "accepted" },
+    });
+
+    res.json({
+      group,
+      pendingRequests,
+      members,
+    });
+  } catch (error) {
+    res.status(500).json({ error: "Failed to fetch group details" });
+  }
+});
+
+app.patch("/api/groups/:id/members/:memberId", async (req, res) => {
+  try {
+    const { action } = req.body;
+    const memberId = req.params.memberId;
+
+    const member = await GroupMember.findByPk(memberId);
+
+    if (action === "accept") {
+      member.status = "accepted";
+    } else if (action === "decline") {
+      member.status = "declined";
+    }
+
+    await member.save();
+    res.json({ message: "Request updated successfully" });
+  } catch (error) {
+    res.status(500).json({ error: "Failed to update member request" });
+  }
+});
+
+
+app.delete("/api/groups/:id/members/:memberId", async (req, res) => {
+  try {
+    const memberId = req.params.memberId;
+    await GroupMember.destroy({ where: { id: memberId } });
+    res.json({ message: "Member removed successfully" });
+  } catch (error) {
+    res.status(500).json({ error: "Failed to remove member" });
+  }
+});
