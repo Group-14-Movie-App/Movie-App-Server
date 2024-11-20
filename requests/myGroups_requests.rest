@@ -1,0 +1,6 @@
+## Fetch My Groups
+GET http://localhost:5000/api/my-groups/1
+Content-Type: application/json
+
+# Replace {{userID}} with the actual user ID before sending the request
+# For example: http://localhost:5000/api/my-groups/1
