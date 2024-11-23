@@ -4,83 +4,134 @@ const pool = require('../helpers/db.js');
 
 // Route to handle submitting a review
 reviewRouter.post('/', async (req, res) => {
-    const { userID, movieTitle, releaseDate, description, rating } = req.body;
-  
-    // Validate that releaseDate is in the correct format (YYYY-MM-DD)
-    const regex = /^\d{4}-\d{2}-\d{2}$/; // Regex to match the format YYYY-MM-DD
-    if (!regex.test(releaseDate)) {
+  const { userID, movieTitle, releaseDate, description, rating } = req.body;
+
+  // Validate that releaseDate is in the correct format (YYYY-MM-DD)
+  const regex = /^\d{4}-\d{2}-\d{2}$/; // Regex to match the format YYYY-MM-DD
+  if (!regex.test(releaseDate)) {
       return res.status(400).json({ message: 'Invalid releaseDate format' });
-    }
-  
-    try {
-      // Check if the user already reviewed the same movie
+  }
+
+  // Extract release year from the releaseDate
+  const releaseYear = new Date(releaseDate).getFullYear();
+
+  try {
+      // Check if the user already reviewed the same movie and release year
       const checkQuery = `
-        SELECT * FROM Reviews 
-        WHERE userID = $1 AND movieTitle = $2
+          SELECT * FROM Reviews 
+          WHERE userID = $1 AND movieTitle = $2 AND EXTRACT(YEAR FROM releaseDate) = $3
       `;
-      const checkResult = await pool.query(checkQuery, [userID, movieTitle]);
-  
+      const checkResult = await pool.query(checkQuery, [userID, movieTitle, releaseYear]);
+
       if (checkResult.rows.length > 0) {
-        return res.status(400).json({
-          message: `You have already reviewed the movie "${movieTitle}".`,
-        });
+          return res.status(400).json({
+              message: `You have already reviewed the movie "${movieTitle}" released in ${releaseYear}.`,
+          });
       }
-  
+
       // Insert the new review
       const query = `
-        INSERT INTO Reviews (userID, movieTitle, releaseDate, description, rating)
-        VALUES ($1, $2, $3, $4, $5)
-        RETURNING *;
+          INSERT INTO Reviews (userID, movieTitle, releaseDate, description, rating)
+          VALUES ($1, $2, $3, $4, $5)
+          RETURNING *;
       `;
       const values = [userID, movieTitle, releaseDate, description, rating];
       const result = await pool.query(query, values);
-  
+
       res.status(201).json({
-        message: 'Review added successfully',
-        review: result.rows[0],
+          message: 'Review added successfully',
+          review: result.rows[0],
       });
-    } catch (error) {
-      console.error('Error adding review:', error.message);
-      res.status(500).json({ message: 'Internal server error' });
-    }
-  });
-
-// Route to get all reviews (with optional filtering by movie title)
-reviewRouter.get('/', async (req, res) => {
-  const { title } = req.query; // Get movie title from query parameter
-
-  try {
-      // Query to fetch reviews and join with user details
-      let query = `
-          SELECT 
-              r.reviewID, 
-              r.userID, 
-              r.movieTitle, 
-              r.releaseDate, 
-              r.description, 
-              r.rating, 
-              r.timestamp,
-              u.firstName, 
-              u.lastName 
-          FROM Reviews r
-          JOIN Users u ON r.userID = u.userID
-      `;
-
-      const values = [];
-      if (title) {
-          query += ' WHERE r.movieTitle = $1';
-          values.push(title);
-      }
-
-      query += ' ORDER BY r.timestamp DESC'; // Order reviews by most recent
-
-      const result = await pool.query(query, values);
-      res.status(200).json(result.rows);
   } catch (error) {
-      console.error('Error fetching reviews:', error.message);
+      console.error('Error adding review:', error.message);
       res.status(500).json({ message: 'Internal server error' });
   }
 });
-  
+
+// Route to get all reviews (with optional filtering by movie title)
+reviewRouter.get('/', async (req, res) => {
+  const { title, releaseDate } = req.query; // Get movie title and release year from query
+
+  try {
+    // Base query
+    let query = `
+      SELECT 
+        r.reviewID, 
+        r.userID, 
+        r.movieTitle, 
+        r.releaseDate, 
+        r.description, 
+        r.rating, 
+        r.timestamp,
+        u.firstName, 
+        u.lastName 
+      FROM Reviews r
+      JOIN Users u ON r.userID = u.userID
+    `;
+    const values = [];
+
+    // Add conditions based on provided filters
+    if (title && releaseDate) {
+      query += ` WHERE r.movieTitle = $1 AND EXTRACT(YEAR FROM r.releaseDate) = $2`;
+      values.push(title, releaseDate);
+    } else if (title) {
+      query += ` WHERE r.movieTitle = $1`;
+      values.push(title);
+    }
+
+    query += ' ORDER BY r.timestamp DESC'; // Order reviews by most recent
+
+    const result = await pool.query(query, values);
+    res.status(200).json(result.rows);
+  } catch (error) {
+    console.error('Error fetching reviews:', error.message);
+    res.status(500).json({ message: 'Internal server error' });
+  }
+});
+
+
+// Route to update a review
+reviewRouter.put('/:reviewID', async (req, res) => {
+  const { reviewID } = req.params;
+  const { userID, description, rating } = req.body;
+
+  try {
+    // Ensure the review belongs to the logged-in user
+    const checkQuery = 'SELECT * FROM Reviews WHERE reviewID = $1 AND userID = $2';
+    const checkResult = await pool.query(checkQuery, [reviewID, userID]);
+
+    if (checkResult.rows.length === 0) {
+      return res.status(403).json({ message: 'You can only edit your own reviews.' });
+    }
+
+    // Update the review
+    const updateQuery = `
+      UPDATE Reviews
+      SET description = $1, rating = $2, timestamp = CURRENT_TIMESTAMP
+      WHERE reviewID = $3
+      RETURNING *;
+    `;
+    const values = [description, rating, reviewID];
+    const updateResult = await pool.query(updateQuery, values);
+
+    res.status(200).json({
+      message: 'Review updated successfully',
+      review: updateResult.rows[0],
+    });
+  } catch (error) {
+    console.error('Error updating review:', error.message);
+    res.status(500).json({ message: 'Internal server error' });
+  }
+});
+
+
+
+
+
+
+
+
+
+
 
 module.exports = reviewRouter;

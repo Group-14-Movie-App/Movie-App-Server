@@ -6,6 +6,8 @@ app.use(cors());
 
 app.use(express.json());
 
+const bodyParser = require('body-parser'); // Parse incoming requests
+app.use(bodyParser.urlencoded({ extended: true })); // Parse URL-encoded requests
 
 
 //Routes Definition do here

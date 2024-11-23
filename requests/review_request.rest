@@ -1,3 +1,11 @@
 ### Get All Reviews
 GET http://localhost:5000/reviews
 Content-Type: application/json
+
+### Get a Movie Review
+GET http://localhost:5000/reviews?title=Wicked&releaseDate=2021
+Content-Type: application/json
+
+### Get Movie Reviews
+GET http://localhost:5000/reviews?title=Venom%3A%20The%20Last%20Dance&releaseDate=2024
+Content-Type: application/json
