@@ -12,6 +12,9 @@ app.use(express.json());
 app.get('/', (req, res) => {
     res.send('Welcome to the Movie App API!');
 });
+const bodyParser = require('body-parser'); // Parse incoming requests
+app.use(bodyParser.urlencoded({ extended: true })); // Parse URL-encoded requests
+
 
 //Routes Definition do here
 const registerRouter = require('./routes/registerRoute.js');
