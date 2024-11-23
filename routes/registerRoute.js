@@ -3,9 +3,24 @@ const bcrypt = require('bcrypt'); // Import bcrypt for password hashing
 const registerRouter = express.Router();
 const pool = require('../helpers/db.js'); // Database connection pool
 
+// Function to validate password
+function validatePassword(password) {
+    const regex = /^(?=.*[A-Z])(?=.*\d).{6,}$/; // At least one capital letter, one number, and minimum 6 characters
+    return regex.test(password);
+  }
+
 // Route to handle user registration
 registerRouter.post('/', async (req, res) => {
     const { email, password, firstName, lastName, city } = req.body;
+
+
+    // Validate password
+    if (!validatePassword(password)) {
+        return res.status(400).json({
+          message:
+            'Password must contain at least one capital letter, one number, and be at least 6 characters long.',
+        });
+      }
 
     try {
         // Hash the password before storing it in the database
@@ -48,4 +63,6 @@ registerRouter.get('/', async (req, res) => {
     }
 });
 
-module.exports = registerRouter;
+module.exports = registerRouter; 
+
+
