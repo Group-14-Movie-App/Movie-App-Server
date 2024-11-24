@@ -1,6 +1,3 @@
-require('dotenv').config();
-
-
 const express = require('express');
 const app = express();
 
@@ -9,9 +6,6 @@ app.use(cors());
 
 app.use(express.json());
 
-app.get('/', (req, res) => {
-    res.send('Welcome to the Movie App API!');
-});
 const bodyParser = require('body-parser'); // Parse incoming requests
 app.use(bodyParser.urlencoded({ extended: true })); // Parse URL-encoded requests
 
@@ -24,7 +18,7 @@ const CreateGroupRouter = require('./routes/CreateGroupRoute.js');
 app.use('/CreateGroup', CreateGroupRouter);
 
 const groupDetailsRouter = require('./routes/groupDetailsRoute.js');
-app.use('/groupDetails', groupDetailsRouter)
+app.use('/groupDetails',groupDetailsRouter)
 
 const reviewRouter = require('./routes/reviewRoute.js')
 app.use('/reviews', reviewRouter)
@@ -40,6 +34,7 @@ app.use('/api/my-groups', myGroupsRouter);
 
 
 const port = 5000
-app.listen(port, () => {
+app.listen(port, ()=>
+{
     console.log(`Server Listining to "http://localhost:${port}"`);
 })

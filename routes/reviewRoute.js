@@ -126,6 +126,30 @@ reviewRouter.put('/:reviewID', async (req, res) => {
 
 
 
+// Route to delete a review
+reviewRouter.delete('/:reviewID', async (req, res) => {
+  const { reviewID } = req.params;
+  const { userID } = req.body;
+
+  try {
+    // Ensure the review belongs to the logged-in user
+    const checkQuery = 'SELECT * FROM Reviews WHERE reviewID = $1 AND userID = $2';
+    const checkResult = await pool.query(checkQuery, [reviewID, userID]);
+
+    if (checkResult.rows.length === 0) {
+      return res.status(403).json({ message: 'You can only delete your own reviews.' });
+    }
+
+    // Delete the review
+    const deleteQuery = 'DELETE FROM Reviews WHERE reviewID = $1';
+    await pool.query(deleteQuery, [reviewID]);
+
+    res.status(200).json({ message: 'Review deleted successfully.' });
+  } catch (error) {
+    console.error('Error deleting review:', error.message);
+    res.status(500).json({ message: 'Internal server error' });
+  }
+});
 
 
 

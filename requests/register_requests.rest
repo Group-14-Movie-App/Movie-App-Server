@@ -10,19 +10,6 @@ Content-Type: application/json
     "city": "Helsinki"
 }
 
-### Register User with Invalid password (no capital letter or number)
-POST http://localhost:5000/register
-Content-Type: application/json
-
-{
-  "email": "newuser@example.com",
-  "password": "password123",
-  "firstName": "Alice",
-  "lastName": "Smith",
-  "city": "Espoo"
-}
-
-
 ### Register User 2
 POST http://localhost:5000/register
 Content-Type: application/json
@@ -35,8 +22,17 @@ Content-Type: application/json
     "city": "Espoo"
 }
 
+### Register User 3
+POST http://localhost:5000/register
+Content-Type: application/json
 
-
+{
+    "email": "hello@example.com",
+    "password": "hello123",
+    "firstName": "Hello",
+    "lastName": "World",
+    "city": "Levi"
+}
 
 
 ### Get All Registered Users

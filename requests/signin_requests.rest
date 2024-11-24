@@ -7,8 +7,6 @@ Content-Type: application/json
   "password": "Password123"
 }
 
-
-
 ### Test Sign-In with invalid credentials (wrong password)
 POST http://localhost:5000/signin
 Content-Type: application/json
@@ -35,4 +33,3 @@ Content-Type: application/json
   "email": "",
   "password": ""
 }
-
