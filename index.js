@@ -32,6 +32,9 @@ app.use('/api/all-groups', allGroupsRouter);
 const myGroupsRouter = require('./routes/myGroupsRoute.js');
 app.use('/api/my-groups', myGroupsRouter);
 
+const profileRouter = require('./routes/profileRoute.js')
+app.use('/profile', profileRouter)
+
 
 const port = 5000
 app.listen(port, ()=>
