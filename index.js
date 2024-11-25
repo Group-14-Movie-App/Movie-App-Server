@@ -35,6 +35,12 @@ app.use('/api/my-groups', myGroupsRouter);
 const profileRouter = require('./routes/profileRoute.js')
 app.use('/profile', profileRouter)
 
+const favoritesRouter = require('./routes/favoritesRoute.js');
+app.use('/favorites', favoritesRouter);
+
+const favoriteMoviesRouter = require('./routes/favoriteMoviesRoute.js');
+app.use('/favorite-movies', favoriteMoviesRouter);
+
 
 const port = 5000
 app.listen(port, ()=>

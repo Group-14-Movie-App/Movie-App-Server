@@ -29,11 +29,15 @@ CREATE TABLE Favorites (
 );
 
 -- FavoriteMovies Table (Associative Table for User Favorites)
+DROP TABLE IF EXISTS FavoriteMovies;
+
 CREATE TABLE FavoriteMovies (
     favoriteMovieID SERIAL PRIMARY KEY,
     favoriteID INT REFERENCES Favorites(favoriteID) ON DELETE CASCADE,
-    movieID INT NOT NULL -- ID of the movie (from API, not in database)
+    movieTitle VARCHAR(255) NOT NULL, -- Movie title
+    releaseYear INT NOT NULL          -- Movie release year
 );
+
 
 -- Groups Table
 CREATE TABLE Groups (

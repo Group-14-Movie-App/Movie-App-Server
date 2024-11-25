@@ -1,0 +1,2 @@
+#Get user's favourites list
+GET http://localhost:5000/favorites?userID=1
