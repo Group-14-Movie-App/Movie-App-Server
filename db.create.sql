@@ -53,6 +53,9 @@ CREATE TABLE GroupMembers (
     groupID INT REFERENCES Groups(groupID) ON DELETE CASCADE,
     userID INT REFERENCES Users(userID) ON DELETE CASCADE
 );
+ALTER TABLE GroupMembers ADD COLUMN isPending BOOLEAN DEFAULT TRUE;
+ALTER TABLE GroupMembers ADD CONSTRAINT unique_group_user UNIQUE (groupID, userID);
+
 
 -- GroupPosts Table
 CREATE TABLE GroupPosts (
@@ -62,4 +65,13 @@ CREATE TABLE GroupPosts (
     movieID INT, -- ID of the movie (from API, not in database)
     showtimeID INT, -- ID of the showtime (from API, not in database)
     content TEXT
+);
+
+
+-- GroupJoinRequests Table
+CREATE TABLE GroupJoinRequests (
+    requestID SERIAL PRIMARY KEY,
+    groupID INT REFERENCES Groups(groupID) ON DELETE CASCADE,
+    userID INT REFERENCES Users(userID) ON DELETE CASCADE,
+    timestamp TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );

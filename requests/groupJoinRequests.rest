@@ -1,0 +1,8 @@
+#Check Pending Requests
+GET http://localhost:5000/groups/5/members
+Content-Type: application/json
+
+
+#Check Group Members
+GET http://localhost:5000/groups/5/members
+Content-Type: application/json
