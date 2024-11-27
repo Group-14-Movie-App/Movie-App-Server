@@ -53,6 +53,12 @@ app.use('/group-join-requests', groupJoinRequestsRouter);
 const otherGroupDetailsRouter = require("./routes/otherGroupDetailsRoute.js");
 app.use("/other-groups", otherGroupDetailsRouter);
 
+const otherGroupPostsRouter = require("./routes/otherGroupPostsRoute.js")
+app.use("/group-posts", otherGroupPostsRouter);
+
+const myGroupPostsRouter = require("./routes/myGroupPostsRoute.js");
+app.use("/my-group-posts", myGroupPostsRouter);
+
 
 
 const port = 5000
