@@ -1,4 +1,14 @@
--- Users Table
+-- Drop tables if they exist (to refresh the database)
+DROP TABLE IF EXISTS GroupJoinRequests;
+DROP TABLE IF EXISTS GroupPosts;
+DROP TABLE IF EXISTS GroupMembers;
+DROP TABLE IF EXISTS Groups;
+DROP TABLE IF EXISTS FavoriteMovies;
+DROP TABLE IF EXISTS Favorites;
+DROP TABLE IF EXISTS Reviews;
+DROP TABLE IF EXISTS Users;
+
+-- Create Users Table
 CREATE TABLE Users (
     userID SERIAL PRIMARY KEY,
     email VARCHAR(255) UNIQUE NOT NULL,
@@ -9,28 +19,25 @@ CREATE TABLE Users (
     isAdmin BOOLEAN DEFAULT FALSE
 );
 
-
--- Reviews Table (Updated Version)
+-- Create Reviews Table
 CREATE TABLE Reviews (
     reviewID SERIAL PRIMARY KEY,
     userID INT REFERENCES Users(userID) ON DELETE CASCADE,
     movieTitle VARCHAR(255) NOT NULL, -- Movie title to uniquely identify
-    releaseDate DATE NOT NULL, -- Release date to distinguish movies with the same title
+    releaseDate DATE NOT NULL,        -- Release date to distinguish movies with the same title
     description TEXT,
     rating INT CHECK (rating BETWEEN 1 AND 5),
     timestamp TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
--- Favorites Table
+-- Create Favorites Table
 CREATE TABLE Favorites (
     favoriteID SERIAL PRIMARY KEY,
     userID INT REFERENCES Users(userID) ON DELETE CASCADE,
     name VARCHAR(255) NOT NULL
 );
 
--- FavoriteMovies Table (Associative Table for User Favorites)
-DROP TABLE IF EXISTS FavoriteMovies;
-
+-- Create FavoriteMovies Table
 CREATE TABLE FavoriteMovies (
     favoriteMovieID SERIAL PRIMARY KEY,
     favoriteID INT REFERENCES Favorites(favoriteID) ON DELETE CASCADE,
@@ -38,8 +45,7 @@ CREATE TABLE FavoriteMovies (
     releaseYear INT NOT NULL          -- Movie release year
 );
 
-
--- Groups Table
+-- Create Groups Table
 CREATE TABLE Groups (
     groupID SERIAL PRIMARY KEY,
     groupName VARCHAR(255) NOT NULL,
@@ -47,17 +53,18 @@ CREATE TABLE Groups (
     ownerID INT REFERENCES Users(userID) ON DELETE CASCADE
 );
 
--- GroupMembers Table (Associative Table for Group Membership)
+-- Create GroupMembers Table
 CREATE TABLE GroupMembers (
     groupMemberID SERIAL PRIMARY KEY,
     groupID INT REFERENCES Groups(groupID) ON DELETE CASCADE,
-    userID INT REFERENCES Users(userID) ON DELETE CASCADE
+    userID INT REFERENCES Users(userID) ON DELETE CASCADE,
+    isPending BOOLEAN DEFAULT TRUE
 );
-ALTER TABLE GroupMembers ADD COLUMN isPending BOOLEAN DEFAULT TRUE;
+
+-- Add unique constraint to GroupMembers to prevent duplicate memberships
 ALTER TABLE GroupMembers ADD CONSTRAINT unique_group_user UNIQUE (groupID, userID);
 
-
--- GroupPosts Table
+-- Create GroupPosts Table
 CREATE TABLE GroupPosts (
     postID SERIAL PRIMARY KEY,
     groupID INT REFERENCES Groups(groupID) ON DELETE CASCADE,
@@ -67,11 +74,12 @@ CREATE TABLE GroupPosts (
     content TEXT
 );
 
-
--- GroupJoinRequests Table
+-- Create GroupJoinRequests Table
 CREATE TABLE GroupJoinRequests (
     requestID SERIAL PRIMARY KEY,
     groupID INT REFERENCES Groups(groupID) ON DELETE CASCADE,
     userID INT REFERENCES Users(userID) ON DELETE CASCADE,
     timestamp TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
+
+-- Database structure creation completed successfully
