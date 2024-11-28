@@ -46,7 +46,6 @@ favoritesRouter.post('/', async (req, res) => {
 
 
 
-// Route to fetch movies in a specific favorite group
 // Route to fetch favorite groups for a specific user
 favoritesRouter.get('/', async (req, res) => {
   const { userID } = req.query; // Extract userID from query parameters
@@ -99,6 +98,36 @@ favoritesRouter.get('/movies/:favoriteID', async (req, res) => {
     res.status(500).json({ message: 'Internal server error' });
   }
 });
+
+
+// Route to fetch favorite groups with movie counts for a user
+favoritesRouter.get('/with-movie-count/:userID', async (req, res) => {
+  const { userID } = req.params;
+
+  try {
+    const query = `
+      SELECT 
+        f.favoriteID, 
+        f.name, 
+        COUNT(fm.favoriteMovieID) AS movie_count
+      FROM Favorites f
+      LEFT JOIN FavoriteMovies fm ON f.favoriteID = fm.favoriteID
+      WHERE f.userID = $1
+      GROUP BY f.favoriteID
+    `;
+    const result = await pool.query(query, [userID]);
+
+    if (result.rows.length === 0) {
+      return res.status(404).json({ message: 'No favorite groups found.' });
+    }
+
+    res.status(200).json(result.rows);
+  } catch (error) {
+    console.error('Error fetching favorite groups with movie counts:', error.message);
+    res.status(500).json({ message: 'Internal server error' });
+  }
+});
+
 
 
 
