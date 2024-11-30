@@ -60,6 +60,10 @@ const myGroupPostsRouter = require("./routes/myGroupPostsRoute.js");
 app.use("/my-group-posts", myGroupPostsRouter);
 
 
+const chatbotRouter = require('./routes/chatbot.js')
+app.use('/chatbot', chatbotRouter);
+
+
 
 const port = 5000
 app.listen(port, ()=>
