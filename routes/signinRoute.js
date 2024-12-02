@@ -1,8 +1,12 @@
 const express = require('express');
 const bcrypt = require('bcrypt'); // To compare hashed passwords
+const jwt = require('jsonwebtoken'); // To generate JWT
 const signinRouter = express.Router();
 
 const pool = require('../helpers/db.js');
+
+// JWT Secret Key
+const JWT_SECRET_KEY = process.env.JWT_SECRET_KEY || 'your_jwt_secret_key';
 
 // Route to handle user sign-in
 signinRouter.post('/', async (req, res) => {
@@ -26,12 +30,28 @@ signinRouter.post('/', async (req, res) => {
       return res.status(401).json({ message: 'Invalid email or password' });
     }
 
-    // Remove sensitive data before sending the response
+    // Remove sensitive data before generating a token
     const { password: _, ...userWithoutPassword } = user;
 
+    // Generate a JWT token
+    const token = jwt.sign(
+      {
+        userid: user.userid,
+        email: user.email,
+        firstname: user.firstname,
+        lastname: user.lastname,
+        city: user.city,
+        isadmin: user.isadmin,
+      },
+      JWT_SECRET_KEY,
+      { expiresIn: '1h' }
+    );
+
+    // Send the user data and token
     res.status(200).json({
       message: 'Sign-in successful',
-      user: userWithoutPassword,
+      user: userWithoutPassword, // Keep the session format as required
+      token,
     });
   } catch (error) {
     console.error('Error during sign-in:', error.message);
