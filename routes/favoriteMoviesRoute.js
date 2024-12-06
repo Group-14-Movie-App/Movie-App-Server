@@ -62,4 +62,35 @@ favoriteMoviesRouter.get('/:favoriteID', async (req, res) => {
   }
 });
 
+
+// Updated DELETE route to remove a movie from a favorite group
+favoriteMoviesRouter.delete("/:favoriteID", async (req, res) => {
+  const { favoriteID } = req.params;
+  const { movieTitle, releaseYear } = req.body;
+
+  if (!favoriteID || !movieTitle || !releaseYear) {
+    return res.status(400).json({ message: "All fields are required." });
+  }
+
+  try {
+    const deleteQuery = `
+      DELETE FROM FavoriteMovies
+      WHERE favoriteID = $1 AND movieTitle = $2 AND releaseYear = $3
+      RETURNING *;
+    `;
+    const result = await pool.query(deleteQuery, [favoriteID, movieTitle, releaseYear]);
+
+    if (result.rowCount === 0) {
+      return res.status(404).json({ message: "Movie not found in the favorite group." });
+    }
+
+    res.status(200).json({ message: "Movie removed successfully.", deletedMovie: result.rows[0] });
+  } catch (error) {
+    console.error("Error deleting movie from favorite group:", error.message);
+    res.status(500).json({ message: "Internal server error." });
+  }
+});
+
+
+
 module.exports = favoriteMoviesRouter;

@@ -130,5 +130,57 @@ favoritesRouter.get('/with-movie-count/:userID', async (req, res) => {
 
 
 
+// Update a favorite group name
+favoritesRouter.put('/:favoriteID', async (req, res) => {
+  const { favoriteID } = req.params;
+  const { name } = req.body;
+
+  if (!name.trim()) {
+    return res.status(400).json({ message: 'Group name cannot be empty.' });
+  }
+
+  try {
+    const query = `
+      UPDATE Favorites
+      SET name = $1
+      WHERE favoriteID = $2
+      RETURNING *;
+    `;
+    const result = await pool.query(query, [name, favoriteID]);
+
+    if (result.rowCount === 0) {
+      return res.status(404).json({ message: 'Favorite group not found.' });
+    }
+
+    res.status(200).json(result.rows[0]);
+  } catch (error) {
+    console.error('Error updating favorite group:', error.message);
+    res.status(500).json({ message: 'Internal server error' });
+  }
+});
+
+// Delete a favorite group
+favoritesRouter.delete('/:favoriteID', async (req, res) => {
+  const { favoriteID } = req.params;
+
+  try {
+    const query = `
+      DELETE FROM Favorites
+      WHERE favoriteID = $1
+    `;
+    const result = await pool.query(query, [favoriteID]);
+
+    if (result.rowCount === 0) {
+      return res.status(404).json({ message: 'Favorite group not found.' });
+    }
+
+    res.status(200).json({ message: 'Favorite group deleted successfully.' });
+  } catch (error) {
+    console.error('Error deleting favorite group:', error.message);
+    res.status(500).json({ message: 'Internal server error' });
+  }
+});
+
+
 
 module.exports = favoritesRouter;
