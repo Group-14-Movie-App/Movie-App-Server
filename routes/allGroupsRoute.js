@@ -69,7 +69,7 @@ allGroupsRouter.post("/group-join-requests", authenticateToken, async (req, res)
 
 // Route to fetch user group statuses
 allGroupsRouter.get("/user-status", authenticateToken, async (req, res) => {
-  const userID = req.user.userid; // Extract userID from the token payload
+  const userID = req.query.userID || req.user.userid; // Use userID from query or token
 
   try {
     const query = `
@@ -92,6 +92,7 @@ allGroupsRouter.get("/user-status", authenticateToken, async (req, res) => {
     res.status(500).json({ message: "Internal server error" });
   }
 });
+
 
 // Cancel a join request
 allGroupsRouter.delete("/:groupID/cancel-request", authenticateToken, async (req, res) => {
