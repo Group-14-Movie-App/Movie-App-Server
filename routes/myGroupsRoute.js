@@ -1,9 +1,10 @@
 const express = require("express");
 const myGroupsRouter = express.Router();
 const pool = require("../helpers/db");
+const authenticateToken = require("../middleware/authenticateToken");
 
 // Route to fetch user's created groups
-myGroupsRouter.get("/", async (req, res) => {
+myGroupsRouter.get("/", authenticateToken, async (req, res) => {
   const { userID } = req.query;
 
   if (!userID) {
@@ -21,9 +22,8 @@ myGroupsRouter.get("/", async (req, res) => {
   }
 });
 
-
 // Route to delete a user's group
-myGroupsRouter.delete("/:groupID", async (req, res) => {
+myGroupsRouter.delete("/:groupID", authenticateToken, async (req, res) => {
   const { groupID } = req.params;
 
   if (!groupID) {
@@ -62,6 +62,5 @@ myGroupsRouter.delete("/:groupID", async (req, res) => {
     res.status(500).json({ message: "Internal server error." });
   }
 });
-
 
 module.exports = myGroupsRouter;

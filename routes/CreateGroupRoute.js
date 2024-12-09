@@ -1,13 +1,15 @@
 const express = require("express");
 const createGroupRouter = express.Router();
 const pool = require("../helpers/db");
+const authenticateToken = require("../middleware/authenticateToken");
 
 // Route to create a new group
-createGroupRouter.post("/", async (req, res) => {
-  const { groupName, description, ownerID } = req.body;
+createGroupRouter.post("/", authenticateToken, async (req, res) => {
+  const { groupName, description } = req.body;
+  const ownerID = req.user.userid; // Extract ownerID from the token payload
 
-  if (!groupName || !ownerID) {
-    return res.status(400).json({ message: "Group name and owner ID are required." });
+  if (!groupName) {
+    return res.status(400).json({ message: "Group name is required." });
   }
 
   try {
@@ -30,7 +32,7 @@ createGroupRouter.post("/", async (req, res) => {
 
     res.status(201).json(result.rows[0]);
   } catch (error) {
-    console.error("Error creating group:", error);
+    console.error("Error creating group:", error.message);
     res.status(500).json({ message: "Internal server error." });
   }
 });

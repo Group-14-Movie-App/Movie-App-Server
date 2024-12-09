@@ -2,7 +2,6 @@ const express = require('express');
 const bcrypt = require('bcrypt'); // To compare hashed passwords
 const jwt = require('jsonwebtoken'); // To generate JWT
 const signinRouter = express.Router();
-
 const pool = require('../helpers/db.js');
 
 // JWT Secret Key
@@ -47,11 +46,10 @@ signinRouter.post('/', async (req, res) => {
       { expiresIn: '1h' }
     );
 
-    // Send the user data and token
     res.status(200).json({
       message: 'Sign-in successful',
-      user: userWithoutPassword, // Keep the session format as required
-      token,
+      user: userWithoutPassword, // User data without password
+      token, // Token for authenticated access
     });
   } catch (error) {
     console.error('Error during sign-in:', error.message);

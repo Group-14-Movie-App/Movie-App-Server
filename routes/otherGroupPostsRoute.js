@@ -1,82 +1,75 @@
 const express = require("express");
 const otherGroupPostsRouter = express.Router();
 const pool = require("../helpers/db.js");
+const authenticateToken = require("../middleware/authenticateToken");
 
 // Get all posts for a group
-otherGroupPostsRouter.get("/:groupID", async (req, res) => {
-    const { groupID } = req.params;
-  
-    try {
-      const ownerQuery = `SELECT ownerID FROM Groups WHERE groupID = $1`;
-      const ownerResult = await pool.query(ownerQuery, [groupID]);
-  
-      if (ownerResult.rows.length === 0) {
-        return res.status(404).json({ message: "Group not found." });
-      }
-  
-      const postsQuery = `
-        SELECT gp.postID, gp.content, gp.userID, u.firstName, u.lastName
-        FROM GroupPosts gp
-        JOIN Users u ON gp.userID = u.userID
-        WHERE gp.groupID = $1
-        ORDER BY gp.postID DESC
-      `;
-      const postsResult = await pool.query(postsQuery, [groupID]);
-  
-      res.status(200).json({
-        posts: postsResult.rows,
-        ownerID: ownerResult.rows[0].ownerid,
-      });
-    } catch (error) {
-      console.error("Error fetching group posts:", error);
-      res.status(500).json({ message: "Internal server error." });
-    }
-  });
-  
+otherGroupPostsRouter.get("/:groupID", authenticateToken, async (req, res) => {
+  const { groupID } = req.params;
 
-// Add a new post to a group
-otherGroupPostsRouter.post("/:groupID/add-post", async (req, res) => {
-    const { groupID } = req.params;
-    const { userID, content } = req.body;
+  try {
+    const ownerQuery = `SELECT ownerID FROM Groups WHERE groupID = $1`;
+    const ownerResult = await pool.query(ownerQuery, [groupID]);
 
-    console.log("Add Post Request:", { groupID, userID, content });
-
-    if (!userID || !content) {
-        return res.status(400).json({ message: "User ID and content are required." });
+    if (ownerResult.rows.length === 0) {
+      return res.status(404).json({ message: "Group not found." });
     }
 
-    try {
-        const membershipQuery = `
-            SELECT * FROM GroupMembers
-            WHERE groupID = $1 AND userID = $2 AND isPending = FALSE
-        `;
-        const membershipResult = await pool.query(membershipQuery, [groupID, userID]);
+    const postsQuery = `
+      SELECT gp.postID, gp.content, gp.userID, u.firstName, u.lastName
+      FROM GroupPosts gp
+      JOIN Users u ON gp.userID = u.userID
+      WHERE gp.groupID = $1
+      ORDER BY gp.postID DESC
+    `;
+    const postsResult = await pool.query(postsQuery, [groupID]);
 
-        console.log("Membership Check:", membershipResult.rows);
-
-        if (membershipResult.rows.length === 0) {
-            return res.status(403).json({ message: "You are not a member of this group." });
-        }
-
-        const insertQuery = `
-            INSERT INTO GroupPosts (groupID, userID, content)
-            VALUES ($1, $2, $3)
-            RETURNING *
-        `;
-        const result = await pool.query(insertQuery, [groupID, userID, content]);
-
-        console.log("Post Added:", result.rows[0]);
-        res.status(201).json(result.rows[0]);
-    } catch (error) {
-        console.error("Error Adding Post:", error);
-        res.status(500).json({ message: "Internal server error." });
-    }
+    res.status(200).json({
+      posts: postsResult.rows,
+      ownerID: ownerResult.rows[0].ownerid,
+    });
+  } catch (error) {
+    console.error("Error fetching group posts:", error);
+    res.status(500).json({ message: "Internal server error." });
+  }
 });
 
+// Add a new post to a group
+otherGroupPostsRouter.post("/:groupID/add-post", authenticateToken, async (req, res) => {
+  const { groupID } = req.params;
+  const { userID, content } = req.body;
 
+  if (!userID || !content) {
+    return res.status(400).json({ message: "User ID and content are required." });
+  }
+
+  try {
+    const membershipQuery = `
+      SELECT * FROM GroupMembers
+      WHERE groupID = $1 AND userID = $2 AND isPending = FALSE
+    `;
+    const membershipResult = await pool.query(membershipQuery, [groupID, userID]);
+
+    if (membershipResult.rows.length === 0) {
+      return res.status(403).json({ message: "You are not a member of this group." });
+    }
+
+    const insertQuery = `
+      INSERT INTO GroupPosts (groupID, userID, content)
+      VALUES ($1, $2, $3)
+      RETURNING *
+    `;
+    const result = await pool.query(insertQuery, [groupID, userID, content]);
+
+    res.status(201).json(result.rows[0]);
+  } catch (error) {
+    console.error("Error adding post:", error);
+    res.status(500).json({ message: "Internal server error." });
+  }
+});
 
 // Delete a user's own post
-otherGroupPostsRouter.delete("/:groupID/:postID", async (req, res) => {
+otherGroupPostsRouter.delete("/:groupID/:postID", authenticateToken, async (req, res) => {
   const { groupID, postID } = req.params;
   const { userID } = req.body;
 
@@ -110,40 +103,33 @@ otherGroupPostsRouter.delete("/:groupID/:postID", async (req, res) => {
   }
 });
 
-
 // Edit a user's own post
-otherGroupPostsRouter.put("/:groupID/edit-post", async (req, res) => {
-    const { groupID } = req.params;
-    const { postID, content } = req.body;
-  
-    if (!postID || !content) {
-      return res.status(400).json({ message: "Post ID and content are required." });
+otherGroupPostsRouter.put("/:groupID/edit-post", authenticateToken, async (req, res) => {
+  const { groupID } = req.params;
+  const { postID, content } = req.body;
+
+  if (!postID || !content) {
+    return res.status(400).json({ message: "Post ID and content are required." });
+  }
+
+  try {
+    const query = `
+      UPDATE GroupPosts
+      SET content = $1
+      WHERE postID = $2 AND groupID = $3
+      RETURNING *
+    `;
+    const result = await pool.query(query, [content, postID, groupID]);
+
+    if (result.rowCount === 0) {
+      return res.status(404).json({ message: "Post not found or not editable." });
     }
-  
-    try {
-      const query = `
-        UPDATE GroupPosts
-        SET content = $1
-        WHERE postID = $2 AND groupID = $3
-        RETURNING *
-      `;
-      const result = await pool.query(query, [content, postID, groupID]);
-  
-      if (result.rowCount === 0) {
-        return res.status(404).json({ message: "Post not found or not editable." });
-      }
-  
-      res.status(200).json(result.rows[0]);
-    } catch (error) {
-      console.error("Error editing post:", error);
-      res.status(500).json({ message: "Internal server error" });
-    }
-  });
-  
 
-
-
-
-
+    res.status(200).json(result.rows[0]);
+  } catch (error) {
+    console.error("Error editing post:", error);
+    res.status(500).json({ message: "Internal server error" });
+  }
+});
 
 module.exports = otherGroupPostsRouter;
