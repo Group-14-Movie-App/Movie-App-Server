@@ -2,10 +2,10 @@
   "name": "movie-app-server",
   "version": "1.0.0",
   "description": "",
-  "main": "index.js",
+  "main": "index.jsx",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
-    "devStart": "nodemon index.js"
+    "test": "vitest",
+    "devStart": "nodemon index.jsx"
   },
   "keywords": [],
   "author": "",
@@ -26,5 +26,9 @@
     "puppeteer-extra": "^3.3.6",
     "puppeteer-extra-plugin-stealth": "^2.11.2",
     "xml2js": "^0.6.2"
+  },
+  "devDependencies": {
+    "supertest": "^7.0.0",
+    "vitest": "^2.1.8"
   }
 }
