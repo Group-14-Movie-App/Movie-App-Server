@@ -235,4 +235,36 @@ reviewRouter.get('/nearest', authenticateToken, async (req, res) => {
 
 
 
+// Route to get all public reviews (accessible without authentication)
+reviewRouter.get('/public', async (req, res) => {
+  try {
+    const query = `
+      SELECT 
+        r.reviewID, 
+        r.userID, 
+        r.movieTitle, 
+        r.releaseDate, 
+        r.description, 
+        r.rating, 
+        r.timestamp,
+        u.firstName, 
+        u.lastName 
+      FROM Reviews r
+      JOIN Users u ON r.userID = u.userID
+      ORDER BY r.timestamp DESC
+    `;
+    const result = await pool.query(query);
+
+    if (result.rows.length === 0) {
+      return res.status(404).json({ message: "No reviews found." });
+    }
+
+    res.status(200).json(result.rows);
+  } catch (error) {
+    console.error("Error fetching public reviews:", error.message);
+    res.status(500).json({ message: "Internal server error" });
+  }
+});
+
+
 module.exports = reviewRouter;
