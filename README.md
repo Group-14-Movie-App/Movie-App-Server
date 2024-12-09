@@ -12,3 +12,5 @@ npm install
 # Step 4: Start the Development Server
 * npm run devStart
 
+# Step 5: Testing
+* npm run test runs the tests when server is not running
