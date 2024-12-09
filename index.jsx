@@ -47,7 +47,7 @@ app.use('/groups', mygroupDetailsRouter);
 const allGroupsRouter = require('./routes/allGroupsRoute.js');
 app.use('/all-groups', allGroupsRouter);
 
-const groupJoinRequestsRouter = require('./routes/groupJoinRequestsRoute');
+const groupJoinRequestsRouter = require('./routes/groupJoinRequestsRoute.js');
 app.use('/group-join-requests', groupJoinRequestsRouter);
 
 const otherGroupDetailsRouter = require("./routes/otherGroupDetailsRoute.js");
@@ -63,7 +63,8 @@ app.use("/my-group-posts", myGroupPostsRouter);
 const chatbotRouter = require('./routes/chatbot.js')
 app.use('/chatbot', chatbotRouter);
 
-
+//export app for testing
+module.exports = app;
 
 const port = 5000
 app.listen(port, ()=>
