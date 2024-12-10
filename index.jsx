@@ -19,6 +19,13 @@ const bodyParser = require("body-parser"); // Parse incoming requests
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 
+// For Deployment test
+app.get("/api/health", (req, res) => {
+  res.json({
+    status: "Backend running!",
+  });
+});
+
 //Routes Definition do here
 const registerRouter = require("./routes/registerRoute.js");
 app.use("/register", registerRouter);
