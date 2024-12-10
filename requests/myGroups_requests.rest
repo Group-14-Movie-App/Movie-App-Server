@@ -1,6 +1,21 @@
-## Fetch My Groups
-GET http://localhost:5000/api/my-groups/1
+### Fetch User's Created Groups (New User)
+GET http://localhost:5000/my-groups
 Content-Type: application/json
+Authorization: Bearer <replace_with_auth_token>
 
-# Replace {{userID}} with the actual user ID before sending the request
-# For example: http://localhost:5000/api/my-groups/1
+### Fetch User's Created Groups (Developer Test Example)
+GET http://localhost:5000/my-groups?userID=7
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyaWQiOjcsImVtYWlsIjoiUnlhbjFAMTIzIiwiZmlyc3RuYW1lIjoiUiIsImxhc3RuYW1lIjoiRCIsImNpdHkiOiJUYW1wZXJlIiwiaXNhZG1pbiI6ZmFsc2UsImlhdCI6MTczMzg2NDAzMCwiZXhwIjoxNzMzODY3NjMwfQ.Prk5TYtclO0JC5T7U0NEBaMmrFrPimMZ3XVmesv1sJ4
+
+
+
+### Delete a User's Group (New User)
+DELETE http://localhost:5000/my-groups/1
+Content-Type: application/json
+Authorization: Bearer <replace_with_auth_token>
+
+### Delete a User's Group (Developer Test Example)
+DELETE http://localhost:5000/my-groups/1
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyaWQiOjcsImVtYWlsIjoiUnlhbjFAMTIzIiwiZmlyc3RuYW1lIjoiUiIsImxhc3RuYW1lIjoiRCIsImNpdHkiOiJUYW1wZXJlIiwiaXNhZG1pbiI6ZmFsc2UsImlhdCI6MTczMzg2NDAzMCwiZXhwIjoxNzMzODY3NjMwfQ.Prk5TYtclO0JC5T7U0NEBaMmrFrPimMZ3XVmesv1sJ4
