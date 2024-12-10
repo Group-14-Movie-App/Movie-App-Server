@@ -1,4 +1,4 @@
-// For deployment test
+// For backend deployment test
 require("dotenv").config();
 // For database deployment test
 const pool = require("./helpers/db.js");
@@ -6,7 +6,7 @@ const pool = require("./helpers/db.js");
 const express = require("express");
 const app = express();
 
-// For deployment test
+// For backend deployment test
 const dbHost = process.env.DB_HOST || "no-database";
 if (dbHost === "no-database") {
   console.log("Warning: No database connected, using mock data.");
