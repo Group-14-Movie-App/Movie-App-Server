@@ -1,5 +1,7 @@
 // For deployment test
 require("dotenv").config();
+// For database deployment test
+const pool = require("./helpers/db.js");
 
 const express = require("express");
 const app = express();
@@ -19,11 +21,23 @@ const bodyParser = require("body-parser"); // Parse incoming requests
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 
-// For Deployment test
+// For Backend Deployment test
 app.get("/api/health", (req, res) => {
   res.json({
     status: "Backend running!",
   });
+});
+
+// For database Deployment test
+app.get("/api/tasks", async (req, res) => {
+  try {
+    const query = "SELECT * FROM users";
+    const result = await pool.query(query);
+    res.json(result.rows);
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ error: err });
+  }
 });
 
 //Routes Definition do here
