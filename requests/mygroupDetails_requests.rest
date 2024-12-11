@@ -1,87 +1,93 @@
-### Fetch Favorite Groups (New User)
-GET http://localhost:5000/favorites?userID=<replace_with_user_id>
+### Fetch Group Details (New User)
+GET http://localhost:5000/groups/1
 Content-Type: application/json
 Authorization: Bearer <replace_with_auth_token>
 
-### Fetch Favorite Groups (Developer Test Example)
-GET http://localhost:5000/favorites?userID=1
+### Fetch Group Details (Developer Test Example)
+GET http://localhost:5000/groups/1
 Content-Type: application/json
 Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyaWQiOjcsImVtYWlsIjoiUnlhbjFAMTIzIiwiZmlyc3RuYW1lIjoiUiIsImxhc3RuYW1lIjoiRCIsImNpdHkiOiJUYW1wZXJlIiwiaXNhZG1pbiI6ZmFsc2UsImlhdCI6MTczMzg2NDAzMCwiZXhwIjoxNzMzODY3NjMwfQ.Prk5TYtclO0JC5T7U0NEBaMmrFrPimMZ3XVmesv1sJ4
 
 
 
-### Add a New Favorite Group (New User)
-POST http://localhost:5000/favorites
+### Fetch Join Requests for a Group (New User)
+GET http://localhost:5000/groups/1/join-requests
 Content-Type: application/json
 Authorization: Bearer <replace_with_auth_token>
 
-{
-  "userID": 1,
-  "name": "My Favorite Movies"
-}
-
-### Add a New Favorite Group (Developer Test Example)
-POST http://localhost:5000/favorites
-Content-Type: application/json
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyaWQiOjcsImVtYWlsIjoiUnlhbjFAMTIzIiwiZmlyc3RuYW1lIjoiUiIsImxhc3RuYW1lIjoiRCIsImNpdHkiOiJUYW1wZXJlIiwiaXNhZG1pbiI6ZmFsc2UsImlhdCI6MTczMzg2NDAzMCwiZXhwIjoxNzMzODY3NjMwfQ.Prk5TYtclO0JC5T7U0NEBaMmrFrPimMZ3XVmesv1sJ4
-
-{
-  "userID": 1,
-  "name": "Sci-Fi Favorites"
-}
-
-
-
-### Fetch Movies in a Specific Favorite Group (New User)
-GET http://localhost:5000/favorites/movies/1
-Content-Type: application/json
-Authorization: Bearer <replace_with_auth_token>
-
-### Fetch Movies in a Specific Favorite Group (Developer Test Example)
-GET http://localhost:5000/favorites/movies/1
+### Fetch Join Requests for a Group (Developer Test Example)
+GET http://localhost:5000/groups/1/join-requests
 Content-Type: application/json
 Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyaWQiOjcsImVtYWlsIjoiUnlhbjFAMTIzIiwiZmlyc3RuYW1lIjoiUiIsImxhc3RuYW1lIjoiRCIsImNpdHkiOiJUYW1wZXJlIiwiaXNhZG1pbiI6ZmFsc2UsImlhdCI6MTczMzg2NDAzMCwiZXhwIjoxNzMzODY3NjMwfQ.Prk5TYtclO0JC5T7U0NEBaMmrFrPimMZ3XVmesv1sJ4
 
 
 
-### Fetch Favorite Groups with Movie Counts (New User)
-GET http://localhost:5000/favorites/with-movie-count/1
-Content-Type: application/json
-Authorization: Bearer <replace_with_auth_token>
-
-### Fetch Favorite Groups with Movie Counts (Developer Test Example)
-GET http://localhost:5000/favorites/with-movie-count/1
-Content-Type: application/json
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyaWQiOjcsImVtYWlsIjoiUnlhbjFAMTIzIiwiZmlyc3RuYW1lIjoiUiIsImxhc3RuYW1lIjoiRCIsImNpdHkiOiJUYW1wZXJlIiwiaXNhZG1pbiI6ZmFsc2UsImlhdCI6MTczMzg2NDAzMCwiZXhwIjoxNzMzODY3NjMwfQ.Prk5TYtclO0JC5T7U0NEBaMmrFrPimMZ3XVmesv1sJ4
-
-
-
-### Update Favorite Group Name (New User)
-PUT http://localhost:5000/favorites/1
+### Accept Join Request (New User)
+POST http://localhost:5000/groups/1/accept-request
 Content-Type: application/json
 Authorization: Bearer <replace_with_auth_token>
 
 {
-  "name": "Updated Group Name"
+  "userID": 2
 }
 
-### Update Favorite Group Name (Developer Test Example)
-PUT http://localhost:5000/favorites/1
+### Accept Join Request (Developer Test Example)
+POST http://localhost:5000/groups/1/accept-request
 Content-Type: application/json
 Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyaWQiOjcsImVtYWlsIjoiUnlhbjFAMTIzIiwiZmlyc3RuYW1lIjoiUiIsImxhc3RuYW1lIjoiRCIsImNpdHkiOiJUYW1wZXJlIiwiaXNhZG1pbiI6ZmFsc2UsImlhdCI6MTczMzg2NDAzMCwiZXhwIjoxNzMzODY3NjMwfQ.Prk5TYtclO0JC5T7U0NEBaMmrFrPimMZ3XVmesv1sJ4
 
 {
-  "name": "My Updated Favorites"
+  "userID": 2
 }
 
 
 
-### Delete a Favorite Group (New User)
-DELETE http://localhost:5000/favorites/1
+### Decline Join Request (New User)
+POST http://localhost:5000/groups/1/decline-request
 Content-Type: application/json
 Authorization: Bearer <replace_with_auth_token>
 
-### Delete a Favorite Group (Developer Test Example)
-DELETE http://localhost:5000/favorites/1
+{
+  "userID": 2
+}
+
+### Decline Join Request (Developer Test Example)
+POST http://localhost:5000/groups/1/decline-request
 Content-Type: application/json
 Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyaWQiOjcsImVtYWlsIjoiUnlhbjFAMTIzIiwiZmlyc3RuYW1lIjoiUiIsImxhc3RuYW1lIjoiRCIsImNpdHkiOiJUYW1wZXJlIiwiaXNhZG1pbiI6ZmFsc2UsImlhdCI6MTczMzg2NDAzMCwiZXhwIjoxNzMzODY3NjMwfQ.Prk5TYtclO0JC5T7U0NEBaMmrFrPimMZ3XVmesv1sJ4
+
+{
+  "userID": 2
+}
+
+
+
+### Fetch Group Members (New User)
+GET http://localhost:5000/groups/1/members
+Content-Type: application/json
+Authorization: Bearer <replace_with_auth_token>
+
+### Fetch Group Members (Developer Test Example)
+GET http://localhost:5000/groups/1/members
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyaWQiOjcsImVtYWlsIjoiUnlhbjFAMTIzIiwiZmlyc3RuYW1lIjoiUiIsImxhc3RuYW1lIjoiRCIsImNpdHkiOiJUYW1wZXJlIiwiaXNhZG1pbiI6ZmFsc2UsImlhdCI6MTczMzg2NDAzMCwiZXhwIjoxNzMzODY3NjMwfQ.Prk5TYtclO0JC5T7U0NEBaMmrFrPimMZ3XVmesv1sJ4
+
+
+
+### Remove Group Member (New User)
+DELETE http://localhost:5000/groups/1/remove-member
+Content-Type: application/json
+Authorization: Bearer <replace_with_auth_token>
+
+{
+  "userID": 2
+}
+
+### Remove Group Member (Developer Test Example)
+DELETE http://localhost:5000/groups/1/remove-member
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyaWQiOjcsImVtYWlsIjoiUnlhbjFAMTIzIiwiZmlyc3RuYW1lIjoiUiIsImxhc3RuYW1lIjoiRCIsImNpdHkiOiJUYW1wZXJlIiwiaXNhZG1pbiI6ZmFsc2UsImlhdCI6MTczMzg2NDAzMCwiZXhwIjoxNzMzODY3NjMwfQ.Prk5TYtclO0JC5T7U0NEBaMmrFrPimMZ3XVmesv1sJ4
+
+{
+  "userID": 2
+}

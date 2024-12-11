@@ -1,0 +1,47 @@
+### Get User Profile Details (New User)
+GET http://localhost:5000/profile/7
+Content-Type: application/json
+Authorization: Bearer <replace_with_auth_token>
+
+### Get User Profile Details (Developer Test Example)
+GET http://localhost:5000/profile/7
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyaWQiOjcsImVtYWlsIjoiUnlhbjFAMTIzIiwiZmlyc3RuYW1lIjoiUiIsImxhc3RuYW1lIjoiRCIsImNpdHkiOiJUYW1wZXJlIiwiaXNhZG1pbiI6ZmFsc2UsImlhdCI6MTczMzg2NDAzMCwiZXhwIjoxNzMzODY3NjMwfQ.Prk5TYtclO0JC5T7U0NEBaMmrFrPimMZ3XVmesv1sJ4
+
+
+
+### Update User Profile Details (New User)
+PUT http://localhost:5000/profile/7
+Content-Type: application/json
+Authorization: Bearer <replace_with_auth_token>
+
+{
+  "email": "newemail@example.com",
+  "firstName": "UpdatedFirstName",
+  "lastName": "UpdatedLastName",
+  "city": "UpdatedCity"
+}
+
+### Update User Profile Details (Developer Test Example)
+PUT http://localhost:5000/profile/7
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyaWQiOjcsImVtYWlsIjoiUnlhbjFAMTIzIiwiZmlyc3RuYW1lIjoiUiIsImxhc3RuYW1lIjoiRCIsImNpdHkiOiJUYW1wZXJlIiwiaXNhZG1pbiI6ZmFsc2UsImlhdCI6MTczMzg2NDAzMCwiZXhwIjoxNzMzODY3NjMwfQ.Prk5TYtclO0JC5T7U0NEBaMmrFrPimMZ3XVmesv1sJ4
+
+{
+  "email": "newemail@example.com",
+  "firstName": "UpdatedFirstName",
+  "lastName": "UpdatedLastName",
+  "city": "UpdatedCity"
+}
+
+
+
+### Delete User Profile (New User)
+DELETE http://localhost:5000/profile/7
+Content-Type: application/json
+Authorization: Bearer <replace_with_auth_token>
+
+### Delete User Profile (Developer Test Example)
+DELETE http://localhost:5000/profile/7
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyaWQiOjcsImVtYWlsIjoiUnlhbjFAMTIzIiwiZmlyc3RuYW1lIjoiUiIsImxhc3RuYW1lIjoiRCIsImNpdHkiOiJUYW1wZXJlIiwiaXNhZG1pbiI6ZmFsc2UsImlhdCI6MTczMzg2NDAzMCwiZXhwIjoxNzMzODY3NjMwfQ.Prk5TYtclO0JC5T7U0NEBaMmrFrPimMZ3XVmesv1sJ4

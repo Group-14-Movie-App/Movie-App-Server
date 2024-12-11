@@ -1,0 +1,73 @@
+### Get All Posts for a Group (New User)
+GET http://localhost:5000/group-posts/1
+Content-Type: application/json
+Authorization: Bearer <replace_with_auth_token>
+
+### Get All Posts for a Group (Developer Test Example)
+GET http://localhost:5000/group-posts/1
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyaWQiOjcsImVtYWlsIjoiUnlhbjFAMTIzIiwiZmlyc3RuYW1lIjoiUiIsImxhc3RuYW1lIjoiRCIsImNpdHkiOiJUYW1wZXJlIiwiaXNhZG1pbiI6ZmFsc2UsImlhdCI6MTczMzg2NDAzMCwiZXhwIjoxNzMzODY3NjMwfQ.Prk5TYtclO0JC5T7U0NEBaMmrFrPimMZ3XVmesv1sJ4
+
+
+
+### Add a New Post to a Group (New User)
+POST http://localhost:5000/group-posts/1/add-post
+Content-Type: application/json
+Authorization: Bearer <replace_with_auth_token>
+
+{
+  "userID": 7,
+  "content": "This is a new post in the group."
+}
+
+### Add a New Post to a Group (Developer Test Example)
+POST http://localhost:5000/group-posts/1/add-post
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyaWQiOjcsImVtYWlsIjoiUnlhbjFAMTIzIiwiZmlyc3RuYW1lIjoiUiIsImxhc3RuYW1lIjoiRCIsImNpdHkiOiJUYW1wZXJlIiwiaXNhZG1pbiI6ZmFsc2UsImlhdCI6MTczMzg2NDAzMCwiZXhwIjoxNzMzODY3NjMwfQ.Prk5TYtclO0JC5T7U0NEBaMmrFrPimMZ3XVmesv1sJ4
+
+{
+  "userID": 7,
+  "content": "This is a new post in the group."
+}
+
+
+
+### Delete a User's Own Post (New User)
+DELETE http://localhost:5000/group-posts/1/10
+Content-Type: application/json
+Authorization: Bearer <replace_with_auth_token>
+
+{
+  "userID": 7
+}
+
+### Delete a User's Own Post (Developer Test Example)
+DELETE http://localhost:5000/group-posts/1/10
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyaWQiOjcsImVtYWlsIjoiUnlhbjFAMTIzIiwiZmlyc3RuYW1lIjoiUiIsImxhc3RuYW1lIjoiRCIsImNpdHkiOiJUYW1wZXJlIiwiaXNhZG1pbiI6ZmFsc2UsImlhdCI6MTczMzg2NDAzMCwiZXhwIjoxNzMzODY3NjMwfQ.Prk5TYtclO0JC5T7U0NEBaMmrFrPimMZ3XVmesv1sJ4
+
+{
+  "userID": 7
+}
+
+
+
+### Edit a User's Own Post (New User)
+PUT http://localhost:5000/group-posts/1/edit-post
+Content-Type: application/json
+Authorization: Bearer <replace_with_auth_token>
+
+{
+  "postID": 10,
+  "content": "Updated content for this post."
+}
+
+### Edit a User's Own Post (Developer Test Example)
+PUT http://localhost:5000/group-posts/1/edit-post
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyaWQiOjcsImVtYWlsIjoiUnlhbjFAMTIzIiwiZmlyc3RuYW1lIjoiUiIsImxhc3RuYW1lIjoiRCIsImNpdHkiOiJUYW1wZXJlIiwiaXNhZG1pbiI6ZmFsc2UsImlhdCI6MTczMzg2NDAzMCwiZXhwIjoxNzMzODY3NjMwfQ.Prk5TYtclO0JC5T7U0NEBaMmrFrPimMZ3XVmesv1sJ4
+
+{
+  "postID": 10,
+  "content": "Updated content for this post."
+}

@@ -1,11 +1,103 @@
-### Get All Reviews
+### Submit a Review (New User)
+POST http://localhost:5000/reviews
+Content-Type: application/json
+Authorization: Bearer <replace_with_auth_token>
+
+{
+  "userID": 7,
+  "movieTitle": "Inception",
+  "releaseDate": "2010-07-16",
+  "description": "An amazing movie with a great concept.",
+  "rating": 5
+}
+
+### Submit a Review (Developer Test Example)
+POST http://localhost:5000/reviews
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyaWQiOjIsImVtYWlsIjoiYW5vdGhlcnVzZXJAZXhhbXBsZS5jb20iLCJmaXJzdG5hbWUiOiJKYW5lZWUiLCJsYXN0bmFtZSI6IkRvZWVlZSIsImNpdHkiOiJWYW50YWEiLCJpc2FkbWluIjpmYWxzZSwiaWF0IjoxNzMzODY3OTU0LCJleHAiOjE3MzM4NzE1NTR9.NzYvQd6i2b7PRuhJJapKFS1VZzip8b3lOCn500hg6aI
+
+{
+  "userID": 2,
+  "movieTitle": "Inception",
+  "releaseDate": "2010-07-16",
+  "description": "An amazing movie with a great concept.",
+  "rating": 5
+}
+
+
+
+### Fetch All Reviews (New User)
 GET http://localhost:5000/reviews
 Content-Type: application/json
+Authorization: Bearer <replace_with_auth_token>
 
-### Get a Movie Review
-GET http://localhost:5000/reviews?title=Wicked&releaseDate=2021
+
+
+### Fetch All Reviews (Developer Test Example)
+GET http://localhost:5000/reviews
 Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyaWQiOjIsImVtYWlsIjoiYW5vdGhlcnVzZXJAZXhhbXBsZS5jb20iLCJmaXJzdG5hbWUiOiJKYW5lZWUiLCJsYXN0bmFtZSI6IkRvZWVlZSIsImNpdHkiOiJWYW50YWEiLCJpc2FkbWluIjpmYWxzZSwiaWF0IjoxNzMzODY3OTU0LCJleHAiOjE3MzM4NzE1NTR9.NzYvQd6i2b7PRuhJJapKFS1VZzip8b3lOCn500hg6aI
 
-### Get Movie Reviews
-GET http://localhost:5000/reviews?title=Red%20One&releaseDate=2023
+
+
+### Fetch Reviews for Nearest Years (New User)
+GET http://localhost:5000/reviews/nearest?title=Inception&releaseDate=2010
+Content-Type: application/json
+Authorization: Bearer <replace_with_auth_token>
+
+
+
+### Fetch Reviews for Nearest Years (Developer Test Example)
+GET http://localhost:5000/reviews/nearest?title=Inception&releaseDate=2010
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyaWQiOjIsImVtYWlsIjoiYW5vdGhlcnVzZXJAZXhhbXBsZS5jb20iLCJmaXJzdG5hbWUiOiJKYW5lZWUiLCJsYXN0bmFtZSI6IkRvZWVlZSIsImNpdHkiOiJWYW50YWEiLCJpc2FkbWluIjpmYWxzZSwiaWF0IjoxNzMzODY3OTU0LCJleHAiOjE3MzM4NzE1NTR9.NzYvQd6i2b7PRuhJJapKFS1VZzip8b3lOCn500hg6aI
+
+
+
+### Update a Review (New User)
+PUT http://localhost:5000/reviews/1
+Content-Type: application/json
+Authorization: Bearer <replace_with_auth_token>
+
+{
+  "userID": 7,
+  "description": "Updated review description.",
+  "rating": 4
+}
+
+### Update a Review (Developer Test Example)
+PUT http://localhost:5000/reviews/1
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyaWQiOjIsImVtYWlsIjoiYW5vdGhlcnVzZXJAZXhhbXBsZS5jb20iLCJmaXJzdG5hbWUiOiJKYW5lZWUiLCJsYXN0bmFtZSI6IkRvZWVlZSIsImNpdHkiOiJWYW50YWEiLCJpc2FkbWluIjpmYWxzZSwiaWF0IjoxNzMzODY3OTU0LCJleHAiOjE3MzM4NzE1NTR9.NzYvQd6i2b7PRuhJJapKFS1VZzip8b3lOCn500hg6aI
+
+{
+  "userID": 7,
+  "description": "Updated review description.",
+  "rating": 4
+}
+
+
+
+### Delete a Review (New User)
+DELETE http://localhost:5000/reviews/1
+Content-Type: application/json
+Authorization: Bearer <replace_with_auth_token>
+
+{
+  "userID": 7
+}
+
+### Delete a Review (Developer Test Example)
+DELETE http://localhost:5000/reviews/1
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyaWQiOjIsImVtYWlsIjoiYW5vdGhlcnVzZXJAZXhhbXBsZS5jb20iLCJmaXJzdG5hbWUiOiJKYW5lZWUiLCJsYXN0bmFtZSI6IkRvZWVlZSIsImNpdHkiOiJWYW50YWEiLCJpc2FkbWluIjpmYWxzZSwiaWF0IjoxNzMzODY3OTU0LCJleHAiOjE3MzM4NzE1NTR9.NzYvQd6i2b7PRuhJJapKFS1VZzip8b3lOCn500hg6aI
+
+{
+  "userID": 7
+}
+
+
+
+### Fetch Public Reviews
+GET http://localhost:5000/reviews/public
 Content-Type: application/json

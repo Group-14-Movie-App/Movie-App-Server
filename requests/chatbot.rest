@@ -1,4 +1,4 @@
-# Chatbot Query Example
+### Chatbot Query Example
 POST http://localhost:5000/chatbot
 Content-Type: application/json
 

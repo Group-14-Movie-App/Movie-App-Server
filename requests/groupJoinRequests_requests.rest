@@ -1,19 +1,19 @@
-### Create Group (New User)
-POST http://localhost:5000/groups
+### Send Join Request to a Group (New User)
+POST http://localhost:5000/group-join-requests
 Content-Type: application/json
 Authorization: Bearer <replace_with_auth_token>
 
 {
-  "groupName": "My First Group",
-  "description": "This is a test group for new users."
+  "userID": 1,
+  "groupID": 2
 }
 
-### Create Group (Developer Test Example)
-POST http://localhost:5000/groups
+### Send Join Request to a Group (Developer Test Example)
+POST http://localhost:5000/group-join-requests
 Content-Type: application/json
 Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyaWQiOjcsImVtYWlsIjoiUnlhbjFAMTIzIiwiZmlyc3RuYW1lIjoiUiIsImxhc3RuYW1lIjoiRCIsImNpdHkiOiJUYW1wZXJlIiwiaXNhZG1pbiI6ZmFsc2UsImlhdCI6MTczMzg2NDAzMCwiZXhwIjoxNzMzODY3NjMwfQ.Prk5TYtclO0JC5T7U0NEBaMmrFrPimMZ3XVmesv1sJ4
 
 {
-  "groupName": "Developer Group",
-  "description": "This group is for testing the API as a developer."
+  "userID": 1,
+  "groupID": 1
 }

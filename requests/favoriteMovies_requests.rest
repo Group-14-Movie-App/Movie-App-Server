@@ -1,0 +1,45 @@
+### Add a Movie to Favorite Group (New User)
+POST http://localhost:5000/favorite-movies
+Content-Type: application/json
+Authorization: Bearer <replace_with_auth_token>
+
+{
+  "favoriteID": 1,
+  "movieTitle": "Inception",
+  "releaseDate": "2010-07-16"
+}
+
+### Add a Movie to Favorite Group (Developer Test Example)
+POST http://localhost:5000/favorite-movies
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyaWQiOjcsImVtYWlsIjoiUnlhbjFAMTIzIiwiZmlyc3RuYW1lIjoiUiIsImxhc3RuYW1lIjoiRCIsImNpdHkiOiJUYW1wZXJlIiwiaXNhZG1pbiI6ZmFsc2UsImlhdCI6MTczMzg2NDAzMCwiZXhwIjoxNzMzODY3NjMwfQ.Prk5TYtclO0JC5T7U0NEBaMmrFrPimMZ3XVmesv1sJ4
+
+{
+  "favoriteID": 1,
+  "movieTitle": "The Matrix",
+  "releaseDate": "1999-03-31"
+}
+
+
+
+### Fetch Movies from a Favorite Group (New User)
+GET http://localhost:5000/favorite-movies/1
+Content-Type: application/json
+Authorization: Bearer <replace_with_auth_token>
+
+### Fetch Movies from a Favorite Group (Developer Test Example)
+GET http://localhost:5000/favorite-movies/1
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyaWQiOjcsImVtYWlsIjoiUnlhbjFAMTIzIiwiZmlyc3RuYW1lIjoiUiIsImxhc3RuYW1lIjoiRCIsImNpdHkiOiJUYW1wZXJlIiwiaXNhZG1pbiI6ZmFsc2UsImlhdCI6MTczMzg2NDAzMCwiZXhwIjoxNzMzODY3NjMwfQ.Prk5TYtclO0JC5T7U0NEBaMmrFrPimMZ3XVmesv1sJ4
+
+
+
+### Remove a Movie from Favorite Group (New User)
+DELETE http://localhost:5000/favorite-movies/1?movieTitle=Inception&releaseYear=2010
+Content-Type: application/json
+Authorization: Bearer <replace_with_auth_token>
+
+### Remove a Movie from Favorite Group (Developer Test Example)
+DELETE http://localhost:5000/favorite-movies/1?movieTitle=The+Matrix&releaseYear=1999
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyaWQiOjcsImVtYWlsIjoiUnlhbjFAMTIzIiwiZmlyc3RuYW1lIjoiUiIsImxhc3RuYW1lIjoiRCIsImNpdHkiOiJUYW1wZXJlIiwiaXNhZG1pbiI6ZmFsc2UsImlhdCI6MTczMzg2NDAzMCwiZXhwIjoxNzMzODY3NjMwfQ.Prk5TYtclO0JC5T7U0NEBaMmrFrPimMZ3XVmesv1sJ4
