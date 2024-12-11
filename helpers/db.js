@@ -12,7 +12,9 @@ const pool = new Pool(
 
         user:process.env.DB_USER,
         password:process.env.DB_PASSWORD,
-        ssl:process.env.SSL
+        ssl: process.env.BACKEND_DEPLOYMENT === 'true'
+        ? { rejectUnauthorized: false } // For Backend deployment
+        : process.env.SSL // Use `SSL` environment variable for other cases
     }
 )
 
