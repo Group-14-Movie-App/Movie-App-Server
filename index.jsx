@@ -89,7 +89,7 @@ app.use("/chatbot", chatbotRouter);
 //export app for testing
 module.exports = app;
 
-const port = 5000;
+const port = 8080;
 app.listen(port, () => {
   console.log(`Server Listining to "http://localhost:${port}"`);
 });
