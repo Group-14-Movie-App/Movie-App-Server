@@ -32,12 +32,12 @@ Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyaWQiOjcsImVtY
 
 
 
-### Fetch Movies in a Specific Favorite Group (New User)
+### Fetch Movies in a Specific Favorite Group - For Logged User (New User)
 GET http://localhost:5000/favorites/movies/1
 Content-Type: application/json
 Authorization: Bearer <replace_with_auth_token>
 
-### Fetch Movies in a Specific Favorite Group (Developer Test Example)
+### Fetch Movies in a Specific Favorite Group - For Logged User (Developer Test Example)
 GET http://localhost:5000/favorites/movies/1
 Content-Type: application/json
 Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyaWQiOjcsImVtYWlsIjoiUnlhbjFAMTIzIiwiZmlyc3RuYW1lIjoiUiIsImxhc3RuYW1lIjoiRCIsImNpdHkiOiJUYW1wZXJlIiwiaXNhZG1pbiI6ZmFsc2UsImlhdCI6MTczMzg2NDAzMCwiZXhwIjoxNzMzODY3NjMwfQ.Prk5TYtclO0JC5T7U0NEBaMmrFrPimMZ3XVmesv1sJ4
@@ -85,3 +85,15 @@ Authorization: Bearer <replace_with_auth_token>
 DELETE http://localhost:5000/favorites/1
 Content-Type: application/json
 Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyaWQiOjcsImVtYWlsIjoiUnlhbjFAMTIzIiwiZmlyc3RuYW1lIjoiUiIsImxhc3RuYW1lIjoiRCIsImNpdHkiOiJUYW1wZXJlIiwiaXNhZG1pbiI6ZmFsc2UsImlhdCI6MTczMzg2NDAzMCwiZXhwIjoxNzMzODY3NjMwfQ.Prk5TYtclO0JC5T7U0NEBaMmrFrPimMZ3XVmesv1sJ4
+
+
+### Fetch Movies in a Specific Favorite Group- For Non Logged User (New User)
+GET http://localhost:5000/favorites/public/1
+Content-Type: application/json
+Authorization: Bearer <replace_with_auth_token>
+
+### Fetch Movies in a Specific Favorite Group - For Non Logged User (Developer Test Example)
+GET http://localhost:5000/favorites/public/1
+Content-Type: application/json
+
+

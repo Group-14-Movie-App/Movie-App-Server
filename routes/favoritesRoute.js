@@ -160,39 +160,31 @@ favoritesRouter.delete('/:favoriteID', authenticateToken, async (req, res) => {
 });
 
 
-
-// Route to fetch favorite group details without authentication
+// Route to fetch movies in a favorite group for non-logged-in users
 favoritesRouter.get('/public/:favoriteID', async (req, res) => {
   const { favoriteID } = req.params;
 
   try {
     const query = `
       SELECT 
-        f.name AS groupName, 
         fm.movieTitle AS movietitle,
         fm.releaseYear AS releaseyear
-      FROM Favorites f
-      LEFT JOIN FavoriteMovies fm ON f.favoriteID = fm.favoriteID
-      WHERE f.favoriteID = $1
+      FROM FavoriteMovies fm
+      WHERE fm.favoriteID = $1
     `;
     const result = await pool.query(query, [favoriteID]);
 
     if (result.rows.length === 0) {
-      return res.status(404).json({ message: 'No data found for this favorite group.' });
+      return res.status(404).json({ message: 'No movies found in this group.' });
     }
 
-    const groupName = result.rows[0].groupname; // Extract the group name
-    const movies = result.rows.map((row) => ({
-      movietitle: row.movietitle,
-      releaseyear: row.releaseyear,
-    }));
-
-    res.status(200).json({ groupName, movies });
+    res.status(200).json(result.rows);
   } catch (error) {
-    console.error('Error fetching public favorite group data:', error.message);
+    console.error('Error fetching movies in favorite group for public:', error.message);
     res.status(500).json({ message: 'Internal server error.' });
   }
 });
+
 
 
 
