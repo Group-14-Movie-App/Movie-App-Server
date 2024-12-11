@@ -5,7 +5,8 @@
   "main": "index.jsx",
   "scripts": {
     "test": "vitest",
-    "devStart": "nodemon index.jsx"
+    "devStart": "nodemon index.jsx",
+    "start": "node index.jsx"
   },
   "keywords": [],
   "author": "",
