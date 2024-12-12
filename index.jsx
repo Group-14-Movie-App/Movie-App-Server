@@ -13,7 +13,15 @@ if (dbHost === "no-database") {
 }
 
 const cors = require("cors");
-app.use(cors());
+// Apply CORS middleware
+app.use(
+  cors({
+    origin: process.env.FRONTEND_URL || "*", // Use your frontend URL or allow all
+    methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
+    allowedHeaders: ["Content-Type", "Authorization"],
+    optionsSuccessStatus: 204, // Handle preflight response
+  })
+);
 
 app.use(express.json());
 
