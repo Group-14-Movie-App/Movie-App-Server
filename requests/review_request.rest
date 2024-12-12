@@ -99,5 +99,5 @@ Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyaWQiOjIsImVtY
 
 
 ### Fetch Public Reviews
-GET http://localhost:5000/reviews/public
+GET https://movieapp-backend1.onrender.com/reviews/public
 Content-Type: application/json

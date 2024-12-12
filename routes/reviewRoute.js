@@ -251,7 +251,6 @@ reviewRouter.get('/public', async (req, res) => {
         u.lastName 
       FROM Reviews r
       JOIN Users u ON r.userID = u.userID
-      ORDER BY r.timestamp DESC
     `;
     const result = await pool.query(query);
 
