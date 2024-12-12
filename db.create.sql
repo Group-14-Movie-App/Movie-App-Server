@@ -61,8 +61,6 @@ CREATE TABLE GroupMembers (
     isPending BOOLEAN DEFAULT TRUE
 );
 
--- Add unique constraint to GroupMembers to prevent duplicate memberships
-ALTER TABLE GroupMembers ADD CONSTRAINT unique_group_user UNIQUE (groupID, userID);
 
 -- Create GroupPosts Table
 CREATE TABLE GroupPosts (
@@ -81,5 +79,9 @@ CREATE TABLE GroupJoinRequests (
     userID INT REFERENCES Users(userID) ON DELETE CASCADE,
     timestamp TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
+
+
+-- Add unique constraint to GroupMembers to prevent duplicate memberships
+ALTER TABLE GroupMembers ADD CONSTRAINT unique_group_user UNIQUE (groupID, userID);
 
 -- Database structure creation completed successfully
