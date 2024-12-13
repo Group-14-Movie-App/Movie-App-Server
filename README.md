@@ -1,196 +1,546 @@
-# Step 1: Clone the Project Repo
-git clone <repository-url>
+# Movie App Backend 🎥
 
+The backend for the Movie App provides APIs to manage users, groups, reviews, favorites, and chatbot interactions. The database structure facilitates user engagement with the app by enabling review creation, group interactions, and more.
 
-# Step 2: Install Dependencies
-npm install
+---
 
-# Step 3: Configure Environment Variables
-* Copy .env.example to create your own .env file:
-* Replace your Database Details
+## Table of Contents
 
-# Step 4: Start the Development Server
-* npm run devStart
+- [Installation Process](#installation-process)
+- [Environment Variables](#environment-variables)
+- [Database Setup](#database-setup)
+- [Database Structure](#database-structure)
+- [Running the Development Server](#running-the-development-server)
+- [Testing](#testing)
+- [REST API Documentation](#rest-api-documentation)
+- [Diagrams](#diagrams)
+- [Class Diagram Explanation](#class-diagram-explanation)
 
-# Step 5: Testing
-* npm run test runs the tests when server is not running
-npx vitest --run --reporter=verbose
+---
 
+## Installation Process
 
+### Prerequisites
 
-# Movie App Backend
+Ensure the following are installed on your system:
+- Node.js (>=14.x)
+- npm (>=6.x)
 
-## Description
-The Movie App backend provides APIs to manage users, groups, reviews, favorites, and chatbot interactions. The database structure and relationships facilitate user engagement with the app, such as reviewing movies, creating/joining groups, and managing favorites.
+### Steps
+
+1. Clone the repository:
+   ```bash
+   git clone https://github.com/Group-14-Movie-App/Movie-App-Server.git
+   ```
+
+2. Navigate to the project directory:
+   ```bash
+   cd Movie-App-Server
+   ```
+
+3. Install dependencies:
+   ```bash
+   npm install
+   ```
+
+4. Copy the `.env.example` file to create your own `.env` file:
+   ```bash
+   cp .env.example .env
+   ```
+
+---
+
+## Environment Variables
+
+In the `.env` file, configure the following fields:
+
+```env
+# Database Details
+DB_NAME=movie
+DB_TEST_NAME=movie_test
+DB_HOST=localhost
+DB_PORT=5432
+DB_USER=postgres
+DB_PASSWORD=your_db_password
+
+# JWT Secret Key
+JWT_SECRET_KEY=anything
+
+# API Keys
+TMDB_API_KEY=your_tmdb_api_key
+OPENAI_API_KEY=your_open_ai_api_key
+```
+
+### Instructions:
+- Replace `your_db_password` with your database password.
+- Replace `your_tmdb_api_key` with your TMDB API key.
+- Replace `your_open_ai_api_key` with your OpenAI API key.
+
+---
+
+## Database Setup
+
+1. Execute the SQL commands in the `db.create.sql` file to create the required tables.
+2. Create a test database with the same structure by executing the same SQL commands. This is essential for running tests.
 
 ---
 
 ## Database Structure
 
-### Entities and Relationships
+The database is structured as follows:
 
-#### **Users**
-- **Attributes**: 
-  - `userID`, `email`, `password`, `firstName`, `lastName`, `city`, `isAdmin`
-- **Relationships**: 
-  - Has many: Reviews, Favorites, Groups (Owner), GroupPosts (Creator), GroupMembers (Member).
+### Users Table
+- **Columns:**
+  - `userID` (Primary Key, Auto Increment)
+  - `email` (Unique, Not Null)
+  - `password` (Not Null)
+  - `firstName`
+  - `lastName`
+  - `city`
+  - `isAdmin` (Default: `FALSE`)
 
-#### **Reviews**
-- **Attributes**: 
-  - `reviewID`, `userID`, `movieTitle`, `releaseDate`, `description`, `rating`, `timestamp`
-- **Relationships**: 
-  - Belongs to: User (each review is written by one user).
+### Reviews Table
+- **Columns:**
+  - `reviewID` (Primary Key, Auto Increment)
+  - `userID` (Foreign Key -> `Users.userID`, Cascade Delete)
+  - `movieTitle` (Not Null)
+  - `releaseDate` (Not Null)
+  - `description`
+  - `rating` (Between 1 and 5)
+  - `timestamp` (Default: Current Timestamp)
 
-#### **Favorites**
-- **Attributes**: 
-  - `favoriteID`, `userID`, `name`
-- **Relationships**: 
-  - Belongs to: User (each favorite belongs to a user).
-  - Has many: FavoriteMovies (movies in the favorite collection).
+### Favorites Table
+- **Columns:**
+  - `favoriteID` (Primary Key, Auto Increment)
+  - `userID` (Foreign Key -> `Users.userID`, Cascade Delete)
+  - `name` (Not Null)
 
-#### **FavoriteMovies**
-- **Attributes**: 
-  - `favoriteMovieID`, `favoriteID`, `movieID`
-- **Relationships**: 
-  - Belongs to: Favorite (each movie is part of a specific favorite collection).
+### FavoriteMovies Table
+- **Columns:**
+  - `favoriteMovieID` (Primary Key, Auto Increment)
+  - `favoriteID` (Foreign Key -> `Favorites.favoriteID`, Cascade Delete)
+  - `movieTitle` (Not Null)
+  - `releaseYear` (Not Null)
 
-#### **Groups**
-- **Attributes**: 
-  - `groupID`, `groupName`, `description`, `ownerID`
-- **Relationships**: 
-  - Has many: GroupMembers, GroupPosts.
-  - Belongs to: User (owner of the group).
+### Groups Table
+- **Columns:**
+  - `groupID` (Primary Key, Auto Increment)
+  - `groupName` (Not Null)
+  - `description`
+  - `ownerID` (Foreign Key -> `Users.userID`, Cascade Delete)
 
-#### **GroupMembers**
-- **Attributes**: 
-  - `groupMemberID`, `groupID`, `userID`
-- **Relationships**: 
-  - Belongs to: Group, User.
+### GroupMembers Table
+- **Columns:**
+  - `groupMemberID` (Primary Key, Auto Increment)
+  - `groupID` (Foreign Key -> `Groups.groupID`, Cascade Delete)
+  - `userID` (Foreign Key -> `Users.userID`, Cascade Delete)
+  - `isPending` (Default: `TRUE`)
 
-#### **GroupPosts**
-- **Attributes**: 
-  - `postID`, `groupID`, `userID`, `movieID`, `showtimeID`, `content`
-- **Relationships**: 
-  - Belongs to: Group, User.
+### GroupPosts Table
+- **Columns:**
+  - `postID` (Primary Key, Auto Increment)
+  - `groupID` (Foreign Key -> `Groups.groupID`, Cascade Delete)
+  - `userID` (Foreign Key -> `Users.userID`, Cascade Delete)
+  - `movieID` (From API, not in database)
+  - `showtimeID` (From API, not in database)
+  - `content`
 
-  ## Class Diagram
-The class diagram describes the database structure, entities, and relationships used in the Movie App.
+### GroupJoinRequests Table
+- **Columns:**
+  - `requestID` (Primary Key, Auto Increment)
+  - `groupID` (Foreign Key -> `Groups.groupID`, Cascade Delete)
+  - `userID` (Foreign Key -> `Users.userID`, Cascade Delete)
+  - `timestamp` (Default: Current Timestamp)
 
-- [View the Class Diagram on Lucidchart](https://lucid.app/lucidchart/7efead80-93dc-429b-aba3-3c036ca35720/edit?viewport_loc=-331%2C-8205%2C7151%2C2715%2C0_0&invitationId=inv_47ca03f0-9df1-4515-9efa-7102eef575ef)
-
+### Constraints
+- Unique Constraint on `GroupMembers` to prevent duplicate memberships: `unique_group_user (groupID, userID)`
 
 ---
 
-## UI Design
-The application has the following key sections:
-1. **Home Page**: Navigation and popular movies.
-2. **Authentication**: Sign-Up and Log-In pages.
-3. **Search**: Movie filtering and details.
-4. **Showtimes**: Finnkino theater schedules.
-5. **Profile**: User account management.
-6. **Groups**: Create, join, and customize groups.
-7. **Reviews**: Add and browse movie reviews.
-8. **Favorites**: Manage and share favorite movie lists.
+## Running the Development Server
 
-- **UI Wireframe**: [View Figma Design](https://www.figma.com/design/Um23jxZOoDbHIjjAZuTNMW/Movie-App-Group-14?node-id=5-1281&t=zMdASt7FiUUvEGga-1)
+To start the server in development mode, run:
+
+```bash
+npm run devStart
+```
+
+The server will be accessible at `http://localhost:5000`.
+
+---
+
+## Testing
+
+1. Stop the server if it is running.
+2. To run the test cases, execute:
+
+   ```bash
+   npm run test
+   ```
+
+Alternatively, use the following command for detailed test reports:
+
+```bash
+npx vitest --run --reporter=verbose
+```
 
 ---
 
 ## REST API Documentation
 
-### User Management
-1. **Register**
-   - **Path**: `/register`
-   - **Method**: `POST`
-   - **Description**: Handles user registration.
+Below are examples of REST API requests for common operations. For more details, refer to the `.rest` files in the `requests` directory.
 
-2. **Sign-In**
-   - **Path**: `/signin`
-   - **Method**: `POST`
-   - **Description**: User authentication and token generation.
+### User Authentication
 
-3. **Profile**
-   - **Path**: `/profile`
-   - **Methods**: 
-     - `GET`: Retrieves user profile information.
-     - `PUT`: Updates profile information.
+**Sign In a User**
+- **Method**: `POST`
+- **Endpoint**: `/signin`
+- **Headers**: 
+  - `Content-Type: application/json`
+- **Request Body**:
+  ```json
+  {
+    "email": "developer@example.com",
+    "password": "DevPassword456"
+  }
+  ```
 
----
+**Register a New User**
+- **Method**: `POST`
+- **Endpoint**: `/register`
+- **Headers**: 
+  - `Content-Type: application/json`
+- **Request Body**:
+  ```json
+  {
+    "email": "testuser@example.com",
+    "password": "Password123",
+    "firstName": "Ryan",
+    "lastName": "Wick",
+    "city": "Helsinki"
+  }
+  ```
 
-### Reviews
-1. **Reviews**
-   - **Path**: `/reviews`
-   - **Methods**: 
-     - `GET`: Fetches reviews (optionally filtered by movie).
-     - `POST`: Adds a new movie review.
-
----
-
-### Favorites
-1. **Favorites**
-   - **Path**: `/favorites`
-   - **Methods**: 
-     - `GET`: Retrieves user's favorites.
-     - `POST`: Adds a favorite.
-     - `DELETE`: Removes a favorite.
-
-2. **Favorite Movies**
-   - **Path**: `/favorite-movies`
-   - **Methods**: 
-     - `GET`: Retrieves favorite movies.
-     - `POST`: Adds a movie to favorites.
+**Fetch All Registered Users**
+- **Method**: `GET`
+- **Endpoint**: `/register`
+- **Headers**: 
+  - `Content-Type: application/json`
 
 ---
 
 ### Groups
-1. **Create Group**
-   - **Path**: `/groups`
-   - **Method**: `POST`
 
-2. **My Groups**
-   - **Path**: `/my-groups`
-   - **Method**: `GET`
+**Fetch All Groups**
+- **Method**: `GET`
+- **Endpoint**: `/all-groups`
+- **Headers**: 
+  - `Content-Type: application/json`
+  - `Authorization: Bearer <replace_with_auth_token>`
 
-3. **Group Details**
-   - **Path**: `/groups`
-   - **Method**: `GET`
+**Send Join Request to a Group**
+- **Method**: `POST`
+- **Endpoint**: `/all-groups/group-join-requests`
+- **Headers**: 
+  - `Content-Type: application/json`
+  - `Authorization: Bearer <replace_with_auth_token>`
+- **Request Body**:
+  ```json
+  {
+    "groupID": 1
+  }
+  ```
 
-4. **All Groups**
-   - **Path**: `/all-groups`
-   - **Method**: `GET`
+**Fetch Group Details**
+- **Method**: `GET`
+- **Endpoint**: `/groups/1`
+- **Headers**:
+  - `Authorization: Bearer <replace_with_auth_token>`
 
-5. **Join Requests**
-   - **Path**: `/group-join-requests`
-   - **Method**: `POST`
+**Fetch User's Created Groups**
+- **Method**: `GET`
+- **Endpoint**: `/my-groups`
+- **Headers**:
+  - `Authorization: Bearer <replace_with_auth_token>`
 
-6. **Other Group Details**
-   - **Path**: `/other-groups`
-   - **Method**: `GET`
-
-7. **Group Posts**
-   - **Path**: `/group-posts`
-   - **Method**: `GET`
-
-8. **My Group Posts**
-   - **Path**: `/my-group-posts`
-   - **Method**: `GET`
+**Delete a User's Group**
+- **Method**: `DELETE`
+- **Endpoint**: `/my-groups/1`
+- **Headers**:
+  - `Authorization: Bearer <replace_with_auth_token>`
 
 ---
 
 ### Chatbot
-1. **Chatbot**
-   - **Path**: `/chatbot`
-   - **Method**: `POST`
+
+**Chatbot Query Example**
+- **Method**: `POST`
+- **Endpoint**: `/chatbot`
+- **Headers**:
+  - `Content-Type: application/json`
+- **Request Body**:
+  ```json
+  {
+      "message": "Is Venom a good movie?"
+  }
+  ```
 
 ---
 
-## Server Setup
-- **Port**: `5000`
-- **Base URL**: `http://localhost:5000`
+### Reviews
 
-## Conclusion
+**Submit a Review**
+- **Method**: `POST`
+- **Endpoint**: `/reviews`
+- **Headers**: 
+  - `Content-Type: application/json`
+  - `Authorization: Bearer <replace_with_auth_token>`
+- **Request Body**:
+  ```json
+  {
+    "userID": 7,
+    "movieTitle": "Inception",
+    "releaseDate": "2010-07-16",
+    "description": "An amazing movie with a great concept.",
+    "rating": 5
+  }
+  ```
 
-This project focused on teamwork, integration of modern technologies, and full-stack development practices. Through this process, we gained practical experience in API integration, database design, and deploying scalable applications.
+**Fetch All Reviews**
+- **Method**: `GET`
+- **Endpoint**: `/reviews`
+- **Headers**:
+  - `Authorization: Bearer <replace_with_auth_token>`
 
+**Fetch Reviews for Nearest Years**
+- **Method**: `GET`
+- **Endpoint**: `/reviews/nearest?title=Inception&releaseDate=2010`
+- **Headers**:
+  - `Authorization: Bearer <replace_with_auth_token>`
 
+**Update a Review**
+- **Method**: `PUT`
+- **Endpoint**: `/reviews/1`
+- **Headers**:
+  - `Content-Type: application/json`
+  - `Authorization: Bearer <replace_with_auth_token>`
+- **Request Body**:
+  ```json
+  {
+    "userID": 7,
+    "description": "Updated review description.",
+    "rating": 4
+  }
+  ```
+
+**Delete a Review**
+- **Method**: `DELETE`
+- **Endpoint**: `/reviews/1`
+- **Headers**:
+  - `Content-Type: application/json`
+  - `Authorization: Bearer <replace_with_auth_token>`
+  - **Request Body**:
+    ```json
+    {
+      "userID": 7
+    }
+    ```
+
+---
+
+### Favorite Groups
+
+**Add a New Favorite Group**
+- **Method**: `POST`
+- **Endpoint**: `/favorites`
+- **Headers**:
+  - `Content-Type: application/json`
+  - `Authorization: Bearer <replace_with_auth_token>`
+- **Request Body**:
+  ```json
+  {
+    "userID": 1,
+    "name": "My Favorite Movies"
+  }
+  ```
+
+**Fetch Favorite Groups**
+- **Method**: `GET`
+- **Endpoint**: `/favorites?userID=<replace_with_user_id>`
+- **Headers**:
+  - `Authorization: Bearer <replace_with_auth_token>`
+
+**Update Favorite Group Name**
+- **Method**: `PUT`
+- **Endpoint**: `/favorites/1`
+- **Headers**:
+  - `Content-Type: application/json`
+  - `Authorization: Bearer <replace_with_auth_token>`
+- **Request Body**:
+  ```json
+  {
+    "name": "Updated Group Name"
+  }
+  ```
+
+**Delete a Favorite Group**
+- **Method**: `DELETE`
+- **Endpoint**: `/favorites/1`
+- **Headers**:
+  - `Authorization: Bearer <replace_with_auth_token>`
+
+---
+
+### Posts
+
+**Fetch All Posts for a Group**
+- **Method**: `GET`
+- **Endpoint**: `/my-group-posts/1`
+- **Headers**:
+  - `Authorization: Bearer <replace_with_auth_token>`
+
+**Add a New Post to a Group**
+- **Method**: `POST`
+- **Endpoint**: `/my-group-posts/1/add-post`
+- **Headers**:
+  - `Content-Type: application/json`
+  - `Authorization: Bearer <replace_with_auth_token>`
+- **Request Body**:
+  ```json
+  {
+    "userID": 7,
+    "content": "This is a new post for the group."
+  }
+  ```
+
+**Edit a Post**
+- **Method**: `PUT`
+- **Endpoint**: `/my-group-posts/1/edit-post`
+- **Headers**:
+  - `Content-Type: application/json`
+  - `Authorization: Bearer <replace_with_auth_token>`
+- **Request Body**:
+  ```json
+  {
+    "postID": 3,
+    "content": "This is the updated content for the post."
+  }
+  ```
+
+**Delete a Post in a Group**
+- **Method**: `DELETE`
+- **Endpoint**: `/my-group-posts/1/delete-post`
+- **Headers**:
+  - `Content-Type: application/json`
+  - `Authorization: Bearer <replace_with_auth_token>`
+  - **Request Body**:
+    ```json
+    {
+      "postID": 3
+    }
+    ```
+
+---
+
+## Diagrams
+
+For better understanding, refer to the following diagrams:
+
+- **Database Diagram**: [Database Diagram](https://lucid.app/lucidchart/7f68d074-315e-445d-bf61-f620f06f2bb2/edit?viewport_loc=-892%2C-834%2C3461%2C2162%2C0_0&invitationId=inv_33414b18-a92e-415b-ae38-9849861a0d58)
+- **Class Diagram**: [Class Diagram](https://lucid.app/lucidchart/800b45f2-0726-4129-9ba7-e4450143994f/edit?viewport_loc=-261%2C-386%2C3870%2C2418%2C0_0&invitationId=inv_72f589c6-6e87-4f30-a8ff-26f286282d1c)
+- **ERD Diagram**: [ERD Diagram](https://lucid.app/lucidchart/5702ae09-34a6-462e-a537-0b966b53215d/edit?viewport_loc=-42%2C-100%2C2293%2C1256%2C0_0&invitationId=inv_156754b4-078d-4ff6-a828-7eb5d56e2d10)
+
+---
+
+## Class Diagram Explanation
+
+The class diagram represents the logical structure of the application based on its database schema and functionalities. Here's a breakdown:
+
+### Users
+- **Attributes:**
+  - userID
+  - email
+  - password
+  - firstName
+  - lastName
+  - city
+  - isAdmin
+- **Relationships:**
+  - `Users` is related to `Reviews` (1:N)
+  - `Users` is related to `Favorites` (1:N)
+  - `Users` is related to `Groups` (1:N, as an owner)
+  - `Users` is related to `GroupMembers` (N:N via `GroupMembers`)
+
+### Reviews
+- **Attributes:**
+  - reviewID
+  - userID (FK to `Users`)
+  - movieTitle
+  - releaseDate
+  - description
+  - rating
+  - timestamp
+- **Relationships:**
+  - Belongs to a single `User`
+
+### Favorites
+- **Attributes:**
+  - favoriteID
+  - userID (FK to `Users`)
+  - name
+- **Relationships:**
+  - Contains multiple `FavoriteMovies`
+  - Belongs to a single `User`
+
+### FavoriteMovies
+- **Attributes:**
+  - favoriteMovieID
+  - favoriteID (FK to `Favorites`)
+  - movieTitle
+  - releaseYear
+- **Relationships:**
+  - Belongs to a single `Favorite`
+
+### Groups
+- **Attributes:**
+  - groupID
+  - groupName
+  - description
+  - ownerID (FK to `Users`)
+- **Relationships:**
+  - `Groups` is related to `GroupMembers` (1:N)
+  - `Groups` is related to `GroupPosts` (1:N)
+  - Owned by a single `User`
+
+### GroupMembers
+- **Attributes:**
+  - groupMemberID
+  - groupID (FK to `Groups`)
+  - userID (FK to `Users`)
+  - isPending
+- **Relationships:**
+  - Connects `Groups` and `Users` in an N:N relationship
+
+### GroupPosts
+- **Attributes:**
+  - postID
+  - groupID (FK to `Groups`)
+  - userID (FK to `Users`)
+  - movieID (From external API)
+  - showtimeID (From external API)
+  - content
+- **Relationships:**
+  - Belongs to a single `Group`
+  - Authored by a single `User`
+
+### GroupJoinRequests
+- **Attributes:**
+  - requestID
+  - groupID (FK to `Groups`)
+  - userID (FK to `Users`)
+  - timestamp
+- **Relationships:**
+  - Links `Users` and `Groups` for membership requests
+
+---
 
