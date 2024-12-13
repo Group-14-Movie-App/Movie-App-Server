@@ -6,15 +6,15 @@ The backend for the Movie App provides APIs to manage users, groups, reviews, fa
 
 ## Table of Contents
 
-- [Installation Process](#installation-process)
-- [Environment Variables](#environment-variables)
-- [Database Setup](#database-setup)
-- [Database Structure](#database-structure)
-- [Running the Development Server](#running-the-development-server)
-- [Testing](#testing)
-- [REST API Documentation](#rest-api-documentation)
-- [Diagrams](#diagrams)
-- [Class Diagram Explanation](#class-diagram-explanation)
+- 🔧 [Installation Process](#installation-process)
+- 🔑 [Environment Variables](#environment-variables)
+- 🔨 [Database Setup](#database-setup)
+- 📊 [Database Structure](#database-structure)
+- ⚙️ [Running the Development Server](#running-the-development-server)
+- 🔧 [Testing](#testing)
+- 🔍 [REST API Documentation](#rest-api-documentation)
+- 🔬 [Diagrams](#diagrams)
+- 📚 [Class Diagram Explanation](#class-diagram-explanation)
 
 ---
 
@@ -23,34 +23,34 @@ The backend for the Movie App provides APIs to manage users, groups, reviews, fa
 ### Prerequisites
 
 Ensure the following are installed on your system:
-- Node.js (>=14.x)
-- npm (>=6.x)
+- Node.js (≮14.x) 🌐
+- npm (≮6.x) 🌐
 
 ### Steps
 
-1. Clone the repository:
+1. Clone the repository: 🔧
    ```bash
    git clone https://github.com/Group-14-Movie-App/Movie-App-Server.git
    ```
 
-2. Navigate to the project directory:
+2. Navigate to the project directory: 🔎
    ```bash
    cd Movie-App-Server
    ```
 
-3. Install dependencies:
+3. Install dependencies: 🔧
    ```bash
    npm install
    ```
 
-4. Copy the `.env.example` file to create your own `.env` file:
+4. Copy the `.env.example` file to create your own `.env` file: 🔑
    ```bash
    cp .env.example .env
    ```
 
 ---
 
-## Environment Variables
+## Environment Variables 🔑
 
 In the `.env` file, configure the following fields:
 
@@ -78,14 +78,14 @@ OPENAI_API_KEY=your_open_ai_api_key
 
 ---
 
-## Database Setup
+## Database Setup 🔨
 
 1. Execute the SQL commands in the `db.create.sql` file to create the required tables.
 2. Create a test database with the same structure by executing the same SQL commands. This is essential for running tests.
 
 ---
 
-## Database Structure
+## Database Structure 📊
 
 The database is structured as follows:
 
@@ -157,7 +157,7 @@ The database is structured as follows:
 
 ---
 
-## Running the Development Server
+## Running the Development Server ⚙️
 
 To start the server in development mode, run:
 
@@ -169,7 +169,7 @@ The server will be accessible at `http://localhost:5000`.
 
 ---
 
-## Testing
+## Testing 🔧
 
 1. Stop the server if it is running.
 2. To run the test cases, execute:
@@ -183,19 +183,18 @@ Alternatively, use the following command for detailed test reports:
 ```bash
 npx vitest --run --reporter=verbose
 ```
-
 ---
 
-## REST API Documentation
+## REST API Documentation 🔍
 
 Below are examples of REST API requests for common operations. For more details, refer to the `.rest` files in the `requests` directory.
 
 ### User Authentication
 
-**Sign In a User**
+**Sign In a User** 🔒
 - **Method**: `POST`
 - **Endpoint**: `/signin`
-- **Headers**: 
+- **Headers**:
   - `Content-Type: application/json`
 - **Request Body**:
   ```json
@@ -208,7 +207,7 @@ Below are examples of REST API requests for common operations. For more details,
 **Register a New User**
 - **Method**: `POST`
 - **Endpoint**: `/register`
-- **Headers**: 
+- **Headers**:
   - `Content-Type: application/json`
 - **Request Body**:
   ```json
@@ -224,7 +223,7 @@ Below are examples of REST API requests for common operations. For more details,
 **Fetch All Registered Users**
 - **Method**: `GET`
 - **Endpoint**: `/register`
-- **Headers**: 
+- **Headers**:
   - `Content-Type: application/json`
 
 ---
@@ -234,14 +233,14 @@ Below are examples of REST API requests for common operations. For more details,
 **Fetch All Groups**
 - **Method**: `GET`
 - **Endpoint**: `/all-groups`
-- **Headers**: 
+- **Headers**:
   - `Content-Type: application/json`
   - `Authorization: Bearer <replace_with_auth_token>`
 
 **Send Join Request to a Group**
 - **Method**: `POST`
 - **Endpoint**: `/all-groups/group-join-requests`
-- **Headers**: 
+- **Headers**:
   - `Content-Type: application/json`
   - `Authorization: Bearer <replace_with_auth_token>`
 - **Request Body**:
@@ -273,7 +272,7 @@ Below are examples of REST API requests for common operations. For more details,
 
 ### Chatbot
 
-**Chatbot Query Example**
+**Chatbot Query Example** 🤖
 - **Method**: `POST`
 - **Endpoint**: `/chatbot`
 - **Headers**:
@@ -289,10 +288,10 @@ Below are examples of REST API requests for common operations. For more details,
 
 ### Reviews
 
-**Submit a Review**
+**Submit a Review** ⭐
 - **Method**: `POST`
 - **Endpoint**: `/reviews`
-- **Headers**: 
+- **Headers**:
   - `Content-Type: application/json`
   - `Authorization: Bearer <replace_with_auth_token>`
 - **Request Body**:
@@ -442,7 +441,7 @@ Below are examples of REST API requests for common operations. For more details,
 
 ---
 
-## Diagrams
+## Diagrams 🏛️
 
 For better understanding, refer to the following diagrams:
 
@@ -543,4 +542,5 @@ The class diagram represents the logical structure of the application based on i
   - Links `Users` and `Groups` for membership requests
 
 ---
+
 
