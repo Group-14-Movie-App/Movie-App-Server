@@ -86,11 +86,17 @@ app.use("/my-group-posts", myGroupPostsRouter);
 const chatbotRouter = require("./routes/chatbot.js");
 app.use("/chatbot", chatbotRouter);
 
+const signoutRouter = require("./routes/signoutRoute.js");
+app.use("/signout", signoutRouter);
+
+
 //export app for testing
 module.exports = app;
 
-// Deployment Test
-const port = 5000;
-app.listen(port, () => {
-  console.log(`Server Listining to "http://localhost:${port}"`);
-});
+// Deployment Test (start the server only when not in test mode)
+if (require.main === module) {
+  const port = process.env.PORT || 5000;
+  app.listen(port, () => {
+    console.log(`Server listening at http://localhost:${port}`);
+  });
+}

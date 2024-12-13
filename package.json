@@ -4,7 +4,7 @@
   "description": "",
   "main": "index.jsx",
   "scripts": {
-    "test": "vitest",
+    "test": "cross-env NODE_ENV=test vitest --run",
     "devStart": "nodemon index.jsx",
     "start": "node index.jsx"
   },
@@ -29,6 +29,8 @@
     "xml2js": "^0.6.2"
   },
   "devDependencies": {
+    "cross-env": "^7.0.3",
+    "mocha": "^11.0.1",
     "supertest": "^7.0.0",
     "vitest": "^2.1.8"
   }

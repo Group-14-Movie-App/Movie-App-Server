@@ -11,12 +11,18 @@ const JWT_SECRET_KEY = process.env.JWT_SECRET_KEY || 'your_jwt_secret_key';
 registerRouter.post('/', async (req, res) => {
   const { email, password, firstName, lastName, city } = req.body;
 
-  try {
-    // Hash the password before storing it in the database
-    const saltRounds = 10;
-    const hashedPassword = await bcrypt.hash(password, saltRounds);
+  console.log('Received data:', { email, password, firstName, lastName, city });
 
-    // Insert user into the Users table
+  try {
+    // Ensure all fields are provided
+    if (!email || !password || !firstName || !lastName || !city) {
+      return res.status(400).json({ message: 'All fields are required' });
+    }
+
+    // Hash password
+    const hashedPassword = await bcrypt.hash(password, 10);
+
+    // Insert user into the database
     const query = `
       INSERT INTO Users (email, password, firstName, lastName, city) 
       VALUES ($1, $2, $3, $4, $5) 
@@ -27,7 +33,7 @@ registerRouter.post('/', async (req, res) => {
 
     const newUser = result.rows[0];
 
-    // Generate a JWT token for the registered user
+    // Generate JWT
     const token = jwt.sign(
       {
         userid: newUser.userid,
@@ -43,19 +49,20 @@ registerRouter.post('/', async (req, res) => {
     res.status(201).json({
       message: 'User registered successfully',
       user: newUser,
-      token, // Send the token for immediate user access
+      token,
     });
   } catch (error) {
     console.error('Error registering user:', error.message);
 
-    // Handle duplicate email error
-    if (error.code === '23505') { // Postgres unique violation error code
+    if (error.code === '23505') {
       res.status(400).json({ message: 'Email already exists' });
     } else {
       res.status(400).json({ message: error.message });
     }
   }
 });
+
+
 
 // Route to get all registered users (excluding passwords for security)
 registerRouter.get('/', async (req, res) => {
