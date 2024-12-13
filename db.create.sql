@@ -1,12 +1,12 @@
 -- Drop tables if they exist (to refresh the database)
-DROP TABLE IF EXISTS GroupJoinRequests;
-DROP TABLE IF EXISTS GroupPosts;
-DROP TABLE IF EXISTS GroupMembers;
-DROP TABLE IF EXISTS Groups;
-DROP TABLE IF EXISTS FavoriteMovies;
-DROP TABLE IF EXISTS Favorites;
-DROP TABLE IF EXISTS Reviews;
-DROP TABLE IF EXISTS Users;
+DROP TABLE IF EXISTS GroupJoinRequests CASCADE;
+DROP TABLE IF EXISTS GroupPosts CASCADE;
+DROP TABLE IF EXISTS GroupMembers CASCADE;
+DROP TABLE IF EXISTS Groups CASCADE;
+DROP TABLE IF EXISTS FavoriteMovies CASCADE;
+DROP TABLE IF EXISTS Favorites CASCADE;
+DROP TABLE IF EXISTS Reviews CASCADE;
+DROP TABLE IF EXISTS Users CASCADE;
 
 -- Create Users Table
 CREATE TABLE Users (
@@ -61,7 +61,6 @@ CREATE TABLE GroupMembers (
     isPending BOOLEAN DEFAULT TRUE
 );
 
-
 -- Create GroupPosts Table
 CREATE TABLE GroupPosts (
     postID SERIAL PRIMARY KEY,
@@ -79,7 +78,6 @@ CREATE TABLE GroupJoinRequests (
     userID INT REFERENCES Users(userID) ON DELETE CASCADE,
     timestamp TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
-
 
 -- Add unique constraint to GroupMembers to prevent duplicate memberships
 ALTER TABLE GroupMembers ADD CONSTRAINT unique_group_user UNIQUE (groupID, userID);
